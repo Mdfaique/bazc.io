@@ -1,21 +1,21 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
   Controls,
-} from "react-flow-renderer";
+} from 'react-flow-renderer';
 
-import Sidebar from "./sidebar";
+import Sidebar from '../Sidebar';
 
-import "./index.css";
+import './index.css';
 
 const initialNodes = [
   {
-    id: "1",
-    type: "input",
-    data: { label: "input node" },
+    id: '1',
+    type: 'input',
+    data: { label: 'input node' },
     position: { x: 250, y: 5 },
   },
 ];
@@ -31,15 +31,12 @@ const DnDFlow = () => {
   const [inputNodeCount, setInputNodeCount] = useState(1); // Initialize with the count of the initial input node
   const [defaultNodeCount, setDefaultNodeCount] = useState(0);
   const [outputNodeCount, setOutputNodeCount] = useState(0);
+  const [conditionalCount, setConditionalNodeCount] = useState(0);
 
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
-
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
+    event.dataTransfer.dropEffect = 'move';
   }, []);
 
   const onDrop = useCallback(
@@ -47,10 +44,13 @@ const DnDFlow = () => {
       event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData("application/reactflow");
+      const nodeData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+
+      const type = nodeData.type;
+      const value = nodeData?.text;
 
       // check if the dropped element is valid
-      if (typeof type === "undefined" || !type) {
+      if (typeof type === 'undefined' || !type) {
         return;
       }
 
@@ -61,23 +61,28 @@ const DnDFlow = () => {
 
       // Get the count and generate the new block name
       let count = 0;
-      let blockName = "";
+      let blockName = '';
       switch (type) {
-        case "input":
+        case 'input':
           count = inputNodeCount;
           blockName = `input${count}`;
           setInputNodeCount((prevCount) => prevCount + 1);
           break;
-        case "default":
+        case 'default':
           count = defaultNodeCount;
           blockName = `default${count}`;
           setDefaultNodeCount((prevCount) => prevCount + 1);
           break;
-        case "output":
+        case 'output':
           count = outputNodeCount;
           blockName = `output${count}`;
           setOutputNodeCount((prevCount) => prevCount + 1);
           break;
+          case 'conditional':
+            count = conditionalCount;
+            blockName = value;
+            setConditionalNodeCount((prevCount) => prevCount + 1);
+            break;
         default:
           break;
       }
@@ -86,19 +91,40 @@ const DnDFlow = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${blockName} node` },
+        data: { label: `${blockName} node`, value },
       };
+
+      const trueBranchNode = {
+        id: getId(),
+        type: "output",
+        position: { x: position.x + 150, y: position.y },
+        data: { label: "True" },
+      };
+  
+      const falseBranchNode = {
+        id: getId(),
+        type: "output",
+        position: { x: position.x + 150, y: position.y + 100 },
+        data: { label: "False" },
+      };
+  
+      setNodes((nds) => nds.concat(newNode, trueBranchNode, falseBranchNode));
+  
+      setEdges((eds) => [
+        ...eds,
+        { id: getId(), source: newNode.id, target: trueBranchNode.id },
+        { id: getId(), source: newNode.id, target: falseBranchNode.id },
+      ]);
 
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance, inputNodeCount, defaultNodeCount, outputNodeCount]
   );
-  
 
   const handleExecute = () => {
-    const inputNodes = nodes.filter((node) => node.type === "input");
-    const defaultNodes = nodes.filter((node) => node.type === "default");
-    const outputNodes = nodes.filter((node) => node.type === "output");
+    const inputNodes = nodes.filter((node) => node.type === 'input');
+    const defaultNodes = nodes.filter((node) => node.type === 'default');
+    const outputNodes = nodes.filter((node) => node.type === 'output');
 
     const inputNodeConnections = edges
       .filter((edge) => inputNodes.find((node) => node.id === edge.source))
@@ -107,21 +133,19 @@ const DnDFlow = () => {
         const targetNode = nodes.find((node) => node.id === edge.target);
         return `${sourceNode?.data.label} -> ${targetNode?.data.label}`;
       })
-      .join(", ");
+      .join(', ');
 
     const defaultNodeConnections = edges
       .filter((edge) => defaultNodes.find((node) => node.id === edge.source))
       .map((edge) => {
         const sourceNode = nodes.find((node) => node.id === edge.source);
         const targetNode = nodes.find((node) => node.id === edge.target);
-        const targetNodeLabel = outputNodes.find(
-          (node) => node.id === edge.target
-        )
+        const targetNodeLabel = outputNodes.find((node) => node.id === edge.target)
           ? `${targetNode?.data.label}`
           : `${targetNode?.data.label}`;
         return `${sourceNode?.data.label} -> ${targetNodeLabel}`;
       })
-      .join(", ");
+      .join(', ');
 
     const outputNodeConnections = edges
       .filter((edge) => outputNodes.find((node) => node.id === edge.source))
@@ -130,7 +154,7 @@ const DnDFlow = () => {
         const targetNode = nodes.find((node) => node.id === edge.target);
         return `${sourceNode?.data.label} -> ${targetNode?.data.label}`;
       })
-      .join(", ");
+      .join(', ');
 
     console.log(`Number of input nodes: ${inputNodes.length}`);
     console.log(`Input node connections: ${inputNodeConnections}`);
@@ -138,9 +162,21 @@ const DnDFlow = () => {
     console.log(`Default node connections: ${defaultNodeConnections}`);
     console.log(`Number of output nodes: ${outputNodes.length}`);
     console.log(`Output node connections: ${outputNodeConnections}`);
-  };
 
+    // Process conditional nodes
+    const conditionalNodes = nodes.filter((node) => node.type === 'conditional');
+
+    conditionalNodes.forEach((node) => {
+      console.log(node)
+      const value = node.data.value;
+      const result = eval(value);
+
+      console.log(node.data.label, " has out ", result === true);
+
+  });
+  }
   return (
+    <>
     <div className="dndflow">
       <ReactFlowProvider>
         <div
@@ -149,11 +185,10 @@ const DnDFlow = () => {
           style={{
             width: "calc(100% - 15rem)",
             height: "600px",
-            // margin: "0 15rem",
-            border: "1px solid black",
           }}
         >
           <ReactFlow
+            className='my-react-flow'
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -169,12 +204,13 @@ const DnDFlow = () => {
         </div>
         <Sidebar />
         <div>
-        <button onClick={handleExecute} style={{ height: "50px" }}>
-          Execute
-        </button>
         </div>
       </ReactFlowProvider>
     </div>
+    <button onClick={handleExecute} className='execute-btn'>
+    Execute
+  </button>
+    </>
   );
 };
 

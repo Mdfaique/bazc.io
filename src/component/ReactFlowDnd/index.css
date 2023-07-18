@@ -1,58 +1,155 @@
 .dndflow {
-    flex-direction: column;
-    display: flex;
-    flex-grow: 1;
-    height: 100%;
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.dndflow aside {
+  position: absolute;
+  right: 0;
+  top: 2rem;
+  height: 60vh;
+  border-right: 1px solid #eee;
+  padding: 16px 12px;
+  font-size: 12px;
+  background: #fcfcfc;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+}
+
+.sidebar-container {
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dndflow aside .description {
+  margin-bottom: 10px;
+}
+
+.dndflow .dndnode {
+  height: 20px;
+  padding: 4px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  border: 1px solid;
+}
+
+.dndflow .dndnode.input {
+  border-color: #0041d0;
+}
+
+.dndflow .dndnode.output {
+  border-color: #ff0072;
+}
+
+.dndflow .dndnode.conditional {
+  border-color: #a52a2a;
+}
+
+.dndflow .reactflow-wrapper {
+  flex-grow: 1;
+  height: 60vh;
+}
+
+.dndflow .selectall {
+  margin-top: 10px;
+}
+
+.my-react-flow {
+ position: absolute;
+ right: 290px;
+ top: 2rem;
+background-color: #f6f6f8;
+  border: 2px dotted black;
+  width: 68vw;
+  height: 80vh;
+  padding: 15px 10px;
+}
+
+.execute-btn {
+  position: relative;
+  bottom: -16rem;
+  left: 50vw;
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.execute-button:hover {
+  background-color: #1976d2;
+}
+
+@media screen and (max-width: 768px) {
+  .dndflow {
+    flex-direction: row;
   }
-  
-  .dndflow aside {
-    border-right: 1px solid #eee;
-    padding: 15px 10px;
-    font-size: 12px;
-    background: #fcfcfc;
+
+  .my-react-flow {
+    width: 60vw;
   }
-  
-  .dndflow aside .description {
-    margin-bottom: 10px;
-  }
-  
-  .dndflow .dndnode {
-    height: 20px;
-    padding: 4px;
-    border: 1px solid #1a192b;
-    border-radius: 2px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: grab;
-  }
-  
-  .dndflow .dndnode.input {
-    border-color: #0041d0;
-  }
-  
-  .dndflow .dndnode.output {
-    border-color: #ff0072;
-  }
-  
-  .dndflow .reactflow-wrapper {
-    flex-grow: 1;
-    height: 100%;
-  }
-  
-  .dndflow .selectall {
-    margin-top: 10px;
-  }
-  
-  @media screen and (min-width: 768px) {
-    .dndflow {
-      flex-direction: row;
-    }
-  
-    .dndflow aside {
-      width: 20%;
-      max-width: 250px;
-    }
-  }
-  
+}
+
+/* create new node for and button css */
+
+.create-node-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-node-button:hover {
+  background-color: #1976d2;
+}
+
+.new-node-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+.new-node-form select,
+.new-node-form input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.new-node-form button[type="submit"],
+.new-node-form button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-node-form button[type="submit"]:hover,
+.new-node-form button:hover {
+  background-color: #45a049;
+}
+
+.new-node-form .cancel-btn {
+  background-color: #969696;
+}
+
+.new-node-form .cancel-btn:hover {
+  background-color: #7a7a7a;
+}
