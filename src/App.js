@@ -1,11 +1,13 @@
 import './App.css';
 import React from 'react';
-import MindNode from './component/node.component';
+// import MindNode from './component/node.component';
+import DnDFlow from './component/ReactFlowDnd';
 
 function App() {
   return (
     <div className="App">
-      <MindNode/>
+      {/* <MindNode/> */}
+      <DnDFlow></DnDFlow>
     </div>
   );
 }
