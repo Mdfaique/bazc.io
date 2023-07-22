@@ -1,0 +1,65 @@
+.console-node-wrapper {
+    border-radius: 18px;
+    width: 18rem;
+    height: 8rem;
+    background-color: #80008047;
+}
+
+.console-component {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: center; */
+    padding: 2.5rem 15px;
+    gap: 12px;
+}
+
+.console-component p {
+    position: absolute;
+    font-size: 12px;
+    top: -8px;
+    left: 12px;
+}
+
+.console-component label {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.console-component input {
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+    border: 1px solid rgb(184 28 223);
+    background-color: transparent;
+}
+
+.console-component input:focus {
+    outline: none;
+}
+
+.console-component button {
+    width: 8rem;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin: auto;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(120, 155, 202);
+}
+
+.console-component button:hover {
+    background-color: rgb(100, 139, 190);
+}
+
+/* console.css */
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  

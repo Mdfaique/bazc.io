@@ -1,0 +1,18 @@
+-> npm install reactflow zustand nanoid
+reactflow - for Ui
+zustand - state management => how things will work in react flow
+nanoid - id generation (generates light weight ids)
+
+-> Setting up index.js file
+Import react flow style sheet for proper functioning of features
+Keep react flow component in a div having some known height and width; also react flow component should be wrapped within ReactFlowProvider tag 
+
+-> Setting up store.js file
+Will contain state handling operations provided by zustand such as onNodeChange, onEdgesChange, etc 
+
+-> Setting up basic app.js file
+importing store.js functionalities and apply them in React flow component.
+Also, use "Shallow" to avoid unnecessary re-rendering.
+
+-> Creating custom nodes
+

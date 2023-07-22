@@ -1,57 +1,57 @@
 import './App.css';
-import React from 'react';
-// import MindNode from './component/node.component';
-import DnDFlow from './component/ReactFlowDnd';
+// import React from 'react';
+// // import MindNode from './component/node.component';
+// import DnDFlow from './component/ReactFlowDnd';
 
-function App() {
+// function App() {
+//   return (
+//     <div className="App">
+//       {/* <MindNode/> */}
+//       <DnDFlow></DnDFlow>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import React from 'react';
+import ReactFlow, { Background, Panel } from 'reactflow';
+import { shallow } from 'zustand/shallow';
+
+import { useStore } from './store';
+import Console from './nodes/console';
+
+const selector = (store) => ({
+  nodes: store.nodes,
+  edges: store.edges,
+  onNodesChange: store.onNodesChange,
+  onEdgesChange: store.onEdgesChange,
+  addEdge: store.addEdge,
+  createNode: store.createNode,
+});
+
+const nodeTypes = {
+  console: Console,
+};
+
+const App = () => {
+  const store = useStore(selector, shallow);
+
   return (
-    <div className="App">
-      {/* <MindNode/> */}
-      <DnDFlow></DnDFlow>
-    </div>
+    <ReactFlow
+      nodes={store.nodes}
+      nodeTypes={nodeTypes}
+      edges={store.edges}
+      onNodesChange={store.onNodesChange}
+      onEdgesChange={store.onEdgesChange}
+      onConnect={store.addEdge}
+    >
+      <Panel position="top-right">
+  <button onClick={() => store.createNode('console')} className='add-console-btn'>Console</button>
+</Panel>
+      <Background />
+    </ReactFlow>
   );
 }
 
 export default App;
-
-// import React, { useCallback } from 'react';
-// import ReactFlow, {   MiniMap,
-//   Controls,
-//   Background,
-//   useNodesState,
-//   useEdgesState,
-//   addEdge,
-// } from 'react-flow-renderer';
-
-
-// const initialNodes = [
-//   { id: '1', position: { x: 100, y: 0 }, data: { label: '1' } },
-//   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-//   { id: '3', position: { x: 50, y: 100 }, data: { label: '3' } },
-// ];
-// const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
-
-// export default function App() {
-//   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-//   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-//   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
-
-  
-
-//   return (
-//     <div style={{ width: '100vw', height: '100vh' }}>
-//       <ReactFlow
-//         nodes={nodes}
-//         edges={edges}
-//         onNodesChange={onNodesChange}
-//         onEdgesChange={onEdgesChange}
-//         onConnect={onConnect}
-//       >
-//         <Controls />
-//         <MiniMap />
-//         <Background variant="dots" gap={12} size={1} />
-//       </ReactFlow>
-//     </div>
-//   );
-// }
