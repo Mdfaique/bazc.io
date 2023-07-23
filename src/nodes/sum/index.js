@@ -12,7 +12,7 @@ const selector = (id) => (store) => ({
 
 const findVariableValue = (variableName) => {
   for (const nodeData of allNodesData) {
-    if (nodeData.type === "variable" && nodeData.name === variableName) {
+    if ((nodeData.type === "variable"||nodeData.type === "sum") && nodeData.name === variableName) {
       return Number(nodeData.value);
     }
   }
@@ -30,6 +30,49 @@ const sum = (var1, var2) => {
   const param2 = isNumericValue(var2) ? Number(var2) : findVariableValue(var2);
   return param1 + param2;
 };
+
+// const sum = (var1, var2) => {
+//   const getVariableValue = (name) => {
+//     const variableNode = allNodesData.find(
+//       (node) => node.type === "variable" && node.name === name
+//     );
+//     return variableNode ? Number(variableNode.value) : null;
+//   };
+
+//   const getSumValue = (name) => {
+//     const sumNode = allNodesData.find(
+//       (node) => node.type === "sum" && node.name === name
+//     );
+//     return sumNode ? Number(sumNode.value) : null;
+//   };
+
+//   const parseInputValue = (input) => {
+//     const numericValue = Number(input);
+//     if (!isNaN(numericValue)) {
+//       // If the input is a valid number, return the number
+//       return numericValue;
+//     } else {
+//       // Otherwise, search for the input as variable or sum name
+//       const variableValue = getVariableValue(input);
+//       if (variableValue !== null) {
+//         return variableValue;
+//       } else {
+//         return getSumValue(input);
+//       }
+//     }
+//   };
+
+//   if (!var1 || !var2) return null;
+
+//   const param1 = parseInputValue(var1);
+//   const param2 = parseInputValue(var2);
+
+//   // Check if either param1 or param2 is null
+//   if (param1 === null || param2 === null) return null;
+
+//   return param1 + param2;
+// };
+
 
 const SumPopup = (props) => {
   const {
@@ -49,25 +92,47 @@ const SumPopup = (props) => {
   };
   const handleStoreSum = () => {
     setPopupVisible(false);
-    const existingIndex = allNodesData.findIndex((obj) => obj.id === id);
-    if (existingIndex !== -1) {
-      allNodesData[existingIndex] = {
-        id: id,
-        type: "sum",
-        name: sumName,
-        params: { var1: variable1, var2: variable2 },
-        value: sum(variable1, variable2),
-      };
+
+    const sumNameExists = allNodesData.some(
+      (node) => node.type === "sum" && node.name === sumName && node.id !== id
+    );
+
+    if (!sumNameExists) {
+      const existingIndex = allNodesData.findIndex((obj) => obj.id === id);
+
+      if (existingIndex !== -1) {
+        allNodesData[existingIndex] = {
+          ...allNodesData[existingIndex], // Keep the existing properties
+          type: "sum",
+          name: sumName,
+          params: { var1: variable1, var2: variable2 },
+          value: sum(variable1, variable2),
+        };
+      } else {
+        allNodesData.push({
+          id: id,
+          type: "sum",
+          name: sumName,
+          params: { var1: variable1, var2: variable2 },
+          value: sum(variable1, variable2),
+        });
+      }
     } else {
-      allNodesData.push({
-        id: id,
-        type: "sum",
-        name: sumName,
-        params: { var1: variable1, var2: variable2 },
-        value: sum(variable1, variable2),
-      });
+      console.log("Sum name already exists. Please choose another name.");
     }
   };
+
+  const sumNameExists = allNodesData.some(
+    (node) => node.type === "sum" && node.name === sumName && node.id !== id
+  );
+
+  const availableVarsAndSums = allNodesData
+    .filter(
+      (node) =>
+        node.type === "variable" ||
+        (node.type === "sum" && node.name !== sumName)
+    )
+    .map((node) => node.name);
 
   return (
     <div className="node-wrapper sum-node-wrapper">
@@ -83,8 +148,12 @@ const SumPopup = (props) => {
               setInputVal(e);
               setSumName(e.target.value);
             }}
-            onBlur={handleStoreSum}
           />
+          {sumNameExists && (
+            <span style={{ color: "red" }}>
+              Sum name already exists. Please choose another name.
+            </span>
+          )}
         </label>
         <label>
           <span>Input value 1</span>
@@ -97,8 +166,18 @@ const SumPopup = (props) => {
               setInputVal(e);
               setVariable1(e.target.value);
             }}
-            onBlur={handleStoreSum}
           />
+          <select
+            value={variable1}
+            onChange={(e) => setVariable1(e.target.value)}
+          >
+            <option value="">Select a variable or sum</option>
+            {availableVarsAndSums.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
         </label>
         <label>
           <span>Input value 2</span>
@@ -111,11 +190,21 @@ const SumPopup = (props) => {
               setInputVal(e);
               setVariable2(e.target.value);
             }}
-            onBlur={handleStoreSum}
           />
+          <select
+            value={variable2}
+            onChange={(e) => setVariable2(e.target.value)}
+          >
+            <option value="">Select a variable or sum</option>
+            {availableVarsAndSums.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
         </label>
         <button onClick={handlePopupClick}>Cancel</button>
-        <button onClick={handleStoreSum}>Save</button>
+        {!sumNameExists && <button onClick={handleStoreSum}>Save</button>}
       </div>
       <Handle type="target" position="top" isConnectable={true} id="sum-b" />
       <Handle type="source" position="bottom" isConnectable={true} id="sum-a" />
@@ -137,6 +226,8 @@ const Sum = ({ id }) => {
     <div className="node-box" onClick={handlePopupClick}>
       <p>Sum</p>
       <span>{sumName || "New sum"}</span>
+      <Handle type="target" position="top" isConnectable={true} id="b" />
+      <Handle type="source" position="bottom" isConnectable={true} id="a" />
     </div>
   ) : (
     <SumPopup

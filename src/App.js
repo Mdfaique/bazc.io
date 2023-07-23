@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import ReactFlow, { Background, Panel } from "reactflow";
+import ReactFlow, { Background, Panel, MiniMap,Controls } from "reactflow";
 import { shallow } from "zustand/shallow";
 import { useStore } from "./store";
 import Console from "./nodes/console";
@@ -61,6 +61,8 @@ const App = () => {
           Data
         </button>
       </Panel>
+      <Controls/>
+        <MiniMap />
       <Background />
     </ReactFlow>
   );
