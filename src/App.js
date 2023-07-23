@@ -1,25 +1,12 @@
-import './App.css';
-// import React from 'react';
-// // import MindNode from './component/node.component';
-// import DnDFlow from './component/ReactFlowDnd';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       {/* <MindNode/> */}
-//       <DnDFlow></DnDFlow>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-import React from 'react';
-import ReactFlow, { Background, Panel } from 'reactflow';
-import { shallow } from 'zustand/shallow';
-
-import { useStore } from './store';
-import Console from './nodes/console';
+import "./App.css";
+import React from "react";
+import ReactFlow, { Background, Panel } from "reactflow";
+import { shallow } from "zustand/shallow";
+import { useStore } from "./store";
+import Console from "./nodes/console";
+import Variable from "./nodes/variable";
+import Sum from "./nodes/sum";
+import allNodesData from "./allNodesData";
 
 const selector = (store) => ({
   nodes: store.nodes,
@@ -32,6 +19,8 @@ const selector = (store) => ({
 
 const nodeTypes = {
   console: Console,
+  variable: Variable,
+  sum: Sum,
 };
 
 const App = () => {
@@ -46,12 +35,35 @@ const App = () => {
       onEdgesChange={store.onEdgesChange}
       onConnect={store.addEdge}
     >
-      <Panel position="top-right">
-  <button onClick={() => store.createNode('console')} className='add-console-btn'>Console</button>
-</Panel>
+      <Panel position="top-right" style={{ display: "flex", gap: "5px" }}>
+        <button
+          onClick={() => store.createNode("console")}
+          className="add-console-btn"
+        >
+          Console
+        </button>
+        <button
+          onClick={() => store.createNode("variable")}
+          className="add-console-btn"
+        >
+          Variable
+        </button>
+        <button
+          onClick={() => store.createNode("sum")}
+          className="add-console-btn"
+        >
+          Sum
+        </button>
+        <button
+          onClick={() => console.log("All nodes data is : ", allNodesData)}
+          className="add-console-btn"
+        >
+          Data
+        </button>
+      </Panel>
       <Background />
     </ReactFlow>
   );
-}
+};
 
 export default App;

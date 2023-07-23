@@ -1,14 +1,78 @@
 .add-console-btn {
-padding: 8px 16px;
-background-color: #4CAF50;
-color: white;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 16px;
-transition: background-color 0.3s;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 .add-console-btn:hover {
-background-color: #45a049;
+  background-color: #45a049;
+}
+
+/* node common css */
+.node-wrapper {
+  border-radius: 18px;
+  width: 18rem;
+  height: 100%;
+  background-color: #80008047;
+}
+
+.node-component {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 15px;
+  padding-bottom: 1rem;
+  gap: 6px;
+}
+
+.node-component p {
+  position: absolute;
+  font-size: 12px;
+  top: -8px;
+  left: 12px;
+}
+
+.node-component label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.node-component input {
+  padding: 5px;
+  border-radius: 8px;
+  border: none;
+  border: 1px solid rgb(184 28 223);
+  background-color: transparent;
+}
+
+.node-component input:focus {
+  outline: none;
+}
+
+.node-box {
+  border-radius: 5px;
+  width: 14rem;
+  height: 3rem;
+  background-color: #80008047;
+  cursor: pointer;
+}
+
+.node-box p {
+  position: absolute;
+  font-size: 12px;
+  top: -8px;
+  left: 12px;
+}
+
+.node-box span {
+  font-size: 14px;
+  position: absolute;
+  top: 25px;
+  left: 14px;
+  font-weight: 600;
 }
