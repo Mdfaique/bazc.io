@@ -4,6 +4,8 @@ import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
 import allNodesData from "../../allNodesData";
+import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
+import Dropdown from "../../component/Dropdown/Dropdown";
 
 const selector = (id) => (store) => ({
   setInputVal: (e) => store.updateNode(id, { inputVal: e.target.value }),
@@ -27,25 +29,6 @@ const VariablePopup = (props) => {
     setPopupVisible(false);
   };
 
-  // const handleStoreVariable = () => {
-  //   setPopupVisible(false);
-  //   const existingIndex = allNodesData.findIndex((obj) => obj.id === id);
-  //   if (existingIndex !== -1) {
-  //     allNodesData[existingIndex] = {
-  //       id: id,
-  //       type: "variable",
-  //       name: variableName,
-  //       value: variableVal,
-  //     };
-  //   } else {
-  //     allNodesData.push({
-  //       id: id,
-  //       type: "variable",
-  //       name: variableName,
-  //       value: variableVal,
-  //     });
-  //   }
-  // };
 
   const handleStoreVariable = () => {
     setPopupVisible(false);
@@ -93,14 +76,13 @@ const VariablePopup = (props) => {
     setVariableVal(e.target.value);
   };
 
-  const handleSelectChange = (e) => {
-    const selectedVariable = e.target.value;
-    setSelectedVariable(selectedVariable); // Store the selected variable in its own state
+  const handleSelectChange = (selectedValue) => {
+    setSelectedVariable(selectedValue);
     const selectedNode = allNodesData.find(
-      (node) => node.name === selectedVariable
+      (node) => node.name === selectedValue
     );
     if (selectedNode) {
-      setVariableVal(selectedNode.value);
+      setVariableVal(selectedNode.value || "");
     }
   };
 
@@ -120,31 +102,6 @@ const VariablePopup = (props) => {
     <div className="node-wrapper variable-node-wrapper">
       <div className="node-component variable-component">
         <p>Variable</p>
-        {/* <label>
-          <span>Name</span>
-          <input
-            className="nodrag"
-            type="text"
-            value={variableName}
-            onChange={(e) => {
-              setInputVal(e);
-              setVariableName(e.target.value);
-            }}
-          />
-        </label> */}
-        {/* <label>
-          <span>Input value</span>
-          <input
-            className="nodrag"
-            type="number"
-            value={variableVal}
-            placeholder="{{input:data1}}"
-            onChange={(e) => {
-              setInputVal(e);
-              setVariableVal(e.target.value);
-            }}
-          />
-        </label> */}
         <label>
           <span>Name</span>
           <input
@@ -168,18 +125,24 @@ const VariablePopup = (props) => {
               placeholder="Type or select from dropdown"
               onChange={handleInputChange}
             />
-            <select value={selectedVariable} onChange={handleSelectChange}>
+            {/* <select value={selectedVariable} onChange={handleSelectChange}>
               <option value="">Select a variable</option>
               {availableVariables.map((variable) => (
                 <option key={variable} value={variable}>
                   {variable}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Dropdown
+              options={availableVariables}
+              onSelect={handleSelectChange}
+              selectedValue={selectedVariable}
+            />
           </div>
         </label>
         <button onClick={handlePopupClick}>Cancel</button>
         {!variableExists && <button onClick={handleStoreVariable}>Save</button>}
+        <DeleteNodeButton nodeId={id} />
       </div>
       <Handle type="target" position="top" isConnectable={true} id="var-b" />
       <Handle type="source" position="bottom" isConnectable={true} id="var-a" />

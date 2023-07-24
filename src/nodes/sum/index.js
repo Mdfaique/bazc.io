@@ -4,6 +4,7 @@ import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
 import allNodesData from "../../allNodesData";
+import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
 
 const selector = (id) => (store) => ({
   setInputVal: (e) => store.updateNode(id, { inputVal: e.target.value }),
@@ -12,7 +13,10 @@ const selector = (id) => (store) => ({
 
 const findVariableValue = (variableName) => {
   for (const nodeData of allNodesData) {
-    if ((nodeData.type === "variable"||nodeData.type === "sum") && nodeData.name === variableName) {
+    if (
+      (nodeData.type === "variable" || nodeData.type === "sum") &&
+      nodeData.name === variableName
+    ) {
       return Number(nodeData.value);
     }
   }
@@ -30,49 +34,6 @@ const sum = (var1, var2) => {
   const param2 = isNumericValue(var2) ? Number(var2) : findVariableValue(var2);
   return param1 + param2;
 };
-
-// const sum = (var1, var2) => {
-//   const getVariableValue = (name) => {
-//     const variableNode = allNodesData.find(
-//       (node) => node.type === "variable" && node.name === name
-//     );
-//     return variableNode ? Number(variableNode.value) : null;
-//   };
-
-//   const getSumValue = (name) => {
-//     const sumNode = allNodesData.find(
-//       (node) => node.type === "sum" && node.name === name
-//     );
-//     return sumNode ? Number(sumNode.value) : null;
-//   };
-
-//   const parseInputValue = (input) => {
-//     const numericValue = Number(input);
-//     if (!isNaN(numericValue)) {
-//       // If the input is a valid number, return the number
-//       return numericValue;
-//     } else {
-//       // Otherwise, search for the input as variable or sum name
-//       const variableValue = getVariableValue(input);
-//       if (variableValue !== null) {
-//         return variableValue;
-//       } else {
-//         return getSumValue(input);
-//       }
-//     }
-//   };
-
-//   if (!var1 || !var2) return null;
-
-//   const param1 = parseInputValue(var1);
-//   const param2 = parseInputValue(var2);
-
-//   // Check if either param1 or param2 is null
-//   if (param1 === null || param2 === null) return null;
-
-//   return param1 + param2;
-// };
-
 
 const SumPopup = (props) => {
   const {
@@ -205,6 +166,7 @@ const SumPopup = (props) => {
         </label>
         <button onClick={handlePopupClick}>Cancel</button>
         {!sumNameExists && <button onClick={handleStoreSum}>Save</button>}
+        <DeleteNodeButton nodeId={id} />
       </div>
       <Handle type="target" position="top" isConnectable={true} id="sum-b" />
       <Handle type="source" position="bottom" isConnectable={true} id="sum-a" />

@@ -69,6 +69,7 @@
 import { applyNodeChanges, applyEdgeChanges } from "reactflow";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
+import allNodesData from "./allNodesData";
 
 export const useStore = create((set, get) => ({
   nodes: [],
@@ -123,5 +124,99 @@ export const useStore = create((set, get) => ({
       get().connectNodes(prevNodeId, newNodeId);
     }
   },
-}));
 
+  //   deleteNode(nodeId) {
+  //   // Find the node to be deleted
+  //   const deletedNode = get().nodes.find((node) => node.id === nodeId);
+  //   console.log("deletedNode",deletedNode)
+
+  //   // Filter out the node to be deleted from the nodes array
+  //   const filteredNodes = get().nodes.filter((node) => node.id !== nodeId);
+  //   console.log("filteredNodes",filteredNodes)
+
+  //   // Filter out edges connected to the node being deleted
+  //   const filteredEdges = get().edges.filter(
+  //     (edge) => edge.source !== nodeId && edge.target !== nodeId
+  //   );
+  //   console.log("filteredEdges",filteredEdges)
+
+  //   set({ nodes: filteredNodes, edges: filteredEdges });
+
+  //   // Find the node below the deleted node (if it exists)
+  //   const belowNode = get().nodes.find(
+  //     (node) => node.position.y > deletedNode.position.y
+  //   );
+  //   console.log("belowNode",belowNode)
+
+  //   // Find the node above the deleted node (if it exists)
+  //   const aboveNode = get().nodes.find(
+  //     (node) => node.position.y < deletedNode.position.y
+  //   );
+  //   console.log("aboveNode",aboveNode)
+
+  //   // Connect the remaining nodes based on their positions
+  //   if (belowNode && aboveNode) {
+  //     get().addEdge({ source: aboveNode.id, target: belowNode.id });
+  //     console.log("belowNode && aboveNode ture")
+  //   }
+
+  //   // Find the index of the node in allNodesData
+  //   const nodeIndex = allNodesData.findIndex((node) => node.id === nodeId);
+
+  //   // If the node exists in allNodesData, remove it
+  //   if (nodeIndex !== -1) {
+  //     allNodesData.splice(nodeIndex, 1);
+  //   }
+  // },
+
+   deleteNode(nodeId) {
+    // Find the node to be deleted
+    // const deletedNode = get().nodes.find((node) => node.id === nodeId);
+    // console.log("deletedNode", deletedNode);
+  
+    // Find the node below the deleted node (if it exists)
+    const belowEdge = get().edges.find(
+      (edge) => edge.source === nodeId && edge.target !== nodeId
+    );
+    const belowNode = belowEdge
+      ? get().nodes.find((node) => node.id === belowEdge.target)
+      : null;
+    // console.log("belowNode", belowNode);
+  
+    // Find the node above the deleted node (if it exists)
+    const aboveEdge = get().edges.find(
+      (edge) => edge.target === nodeId && edge.source !== nodeId
+    );
+    const aboveNode = aboveEdge
+      ? get().nodes.find((node) => node.id === aboveEdge.source)
+      : null;
+    // console.log("aboveNode", aboveNode);
+  
+    // Connect the remaining nodes based on their positions
+    if (belowNode && aboveNode) {
+      get().addEdge({ source: aboveNode.id, target: belowNode.id });
+      // console.log("belowNode && aboveNode true");
+    }
+  
+    // Filter out edges connected to the node being deleted
+    const filteredEdges = get().edges.filter(
+      (edge) => edge.source !== nodeId && edge.target !== nodeId
+    );
+    // console.log("filteredEdges", filteredEdges);
+  
+    // Filter out the node to be deleted from the nodes array
+    const filteredNodes = get().nodes.filter((node) => node.id !== nodeId);
+    // console.log("filteredNodes", filteredNodes);
+  
+    set({ nodes: filteredNodes, edges: filteredEdges });
+  
+    // Find the index of the node in allNodesData
+    const nodeIndex = allNodesData.findIndex((node) => node.id === nodeId);
+  
+    // If the node exists in allNodesData, remove it
+    if (nodeIndex !== -1) {
+      allNodesData.splice(nodeIndex, 1);
+    }
+  }
+  
+}));

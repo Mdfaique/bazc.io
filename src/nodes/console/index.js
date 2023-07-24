@@ -4,6 +4,7 @@ import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
 import allNodesData from "../../allNodesData";
+import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
 
 const selector = (id) => (store) => ({
   setInputVal: (e) => store.updateNode(id, { inputVal: e.target.value }),
@@ -80,6 +81,7 @@ const Console = ({ id }) => {
           <option value="dropdown">Select from Dropdown</option>
         </select>
         <button onClick={handleConsole}>Print value</button>
+        <DeleteNodeButton nodeId={id} />
       </div>
       <Handle type="target" position="top" isConnectable={true} id="b" />
       <Handle type="source" position="bottom" isConnectable={true} id="a" />
