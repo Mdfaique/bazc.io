@@ -6,7 +6,6 @@ import { useStore } from "./store";
 import Console from "./nodes/console";
 import Variable from "./nodes/variable";
 import Sum from "./nodes/sum";
-import allNodesData from "./allNodesData";
 
 const selector = (store) => ({
   nodes: store.nodes,
@@ -54,11 +53,13 @@ const App = () => {
         >
           Sum
         </button>
-        <button
-          onClick={() => console.log("All nodes data is : ", allNodesData)}
-          className="add-console-btn"
-        >
-          Data
+        <button onClick={() => console.log("All nodes : ", store.nodes)}
+          className="add-console-btn">
+          Nodes
+        </button>
+        <button onClick={() => console.log("All edges : ", store.edges)}
+          className="add-console-btn">
+          Edges
         </button>
       </Panel>
       <Controls/>

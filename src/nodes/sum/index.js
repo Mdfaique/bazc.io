@@ -3,37 +3,8 @@ import { Handle } from "reactflow";
 import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
-import allNodesData from "../../allNodesData";
 import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
-
-const selector = (id) => (store) => ({
-  setInputVal: (e) => store.updateNode(id, { inputVal: e.target.value }),
-  setType: (e) => store.updateNode(id, { type: e.target.value }),
-});
-
-const findVariableValue = (variableName) => {
-  for (const nodeData of allNodesData) {
-    if (
-      (nodeData.type === "variable" || nodeData.type === "sum") &&
-      nodeData.name === variableName
-    ) {
-      return Number(nodeData.value);
-    }
-  }
-  return null;
-};
-
-const isNumericValue = (value) => {
-  const numericRegex = /^[0-9]+$/;
-  return numericRegex.test(value);
-};
-
-const sum = (var1, var2) => {
-  if (!var1 || !var2) return;
-  const param1 = isNumericValue(var1) ? Number(var1) : findVariableValue(var1);
-  const param2 = isNumericValue(var2) ? Number(var2) : findVariableValue(var2);
-  return param1 + param2;
-};
+import Dropdown from "../../component/Dropdown/Dropdown";
 
 const SumPopup = (props) => {
   const {
@@ -46,54 +17,83 @@ const SumPopup = (props) => {
     setVariable2,
     setPopupVisible,
   } = props;
+
+  const selector = (id) => (store) => ({
+    setInputVal: (e) => store.updateNode(id, {name: sumName, params: {value1: variable1, value2: variable2}, value: sum(variable1, variable2), type: 'output' }),
+    setType: (e) => store.updateNode(id, { type: e.target.value }),
+  });
+  
+  const selector2 = (store) => ({
+    nodes: store.nodes,
+  });
+
+  const store = useStore(selector2, shallow);
+
   const { setInputVal } = useStore(selector(id), shallow);
+  const [sumExists, setSumExists] = useState(false);
+
+  // const findVariableValue = (variableName) => {
+  //   for (const node of store?.nodes) {
+  //     if (node?.data?.name === variableName
+  //     ) {
+  //       return Number(node?.data?.value);
+  //     }
+  //   }
+  //   return null;
+  // };
+  
+  // const isNumericValue = (value) => {
+  //   const numericRegex = /^[0-9]+$/;
+  //   return numericRegex.test(value);
+  // };
+  
+  const sum = (var1, var2) => {
+    // if (!var1 || !var2) return;
+    // const param1 = isNumericValue(var1) ? Number(var1) : findVariableValue(var1);
+    // const param2 = isNumericValue(var2) ? Number(var2) : findVariableValue(var2);
+    return Number(var1) + Number(var2);
+  };
+
+    const handleNameChange = (e) => {
+    const newName = e.target.value;
+    setSumName(newName);
+
+    const sumExists = store?.nodes?.some(
+      (node) => node?.data?.name === newName && node.id !== id
+    );
+    setSumExists(sumExists);
+  };
 
   const handlePopupClick = () => {
     setPopupVisible(false);
   };
-  const handleStoreSum = () => {
-    setPopupVisible(false);
 
-    const sumNameExists = allNodesData.some(
-      (node) => node.type === "sum" && node.name === sumName && node.id !== id
+  const handleStoreSum = () => {
+    setInputVal(id, { name: sumName, params: {value1: variable1, value2: variable2}, value: sum(variable1, variable2), type: 'output' } );
+
+      const nodes = useStore.getState().nodes.map((node) =>
+      node.id === id ? { ...node, data: { ...node.data, name: sumName, params: {value1: variable1, value2: variable2}, value: sum(variable1, variable2), type: 'output' } } : node
     );
 
-    if (!sumNameExists) {
-      const existingIndex = allNodesData.findIndex((obj) => obj.id === id);
+    const edges = useStore.getState().edges;
 
-      if (existingIndex !== -1) {
-        allNodesData[existingIndex] = {
-          ...allNodesData[existingIndex], // Keep the existing properties
-          type: "sum",
-          name: sumName,
-          params: { var1: variable1, var2: variable2 },
-          value: sum(variable1, variable2),
-        };
-      } else {
-        allNodesData.push({
-          id: id,
-          type: "sum",
-          name: sumName,
-          params: { var1: variable1, var2: variable2 },
-          value: sum(variable1, variable2),
-        });
-      }
-    } else {
-      console.log("Sum name already exists. Please choose another name.");
-    }
+    useStore.getState().updateNodesAndEdges(nodes, edges);
+    setPopupVisible(false); // Close the popup after saving
   };
 
-  const sumNameExists = allNodesData.some(
-    (node) => node.type === "sum" && node.name === sumName && node.id !== id
-  );
+  const availableOptions = store.nodes?.length > 1 ? store.nodes.filter((node) => node?.id !== id).map((node) => ({
+    name: node?.data?.name,
+    value: node?.data?.value,
+    type: node?.data?.type
+  })) : [];
 
-  const availableVarsAndSums = allNodesData
-    .filter(
-      (node) =>
-        node.type === "variable" ||
-        (node.type === "sum" && node.name !== sumName)
-    )
-    .map((node) => node.name);
+  const handleSelectChange1 = (selectedValue1) => {
+    setVariable1(selectedValue1);
+  }
+
+  const handleSelectChange2 = (selectedValue2) => {
+    setVariable2(selectedValue2);
+  }
 
   return (
     <div className="node-wrapper sum-node-wrapper">
@@ -105,12 +105,9 @@ const SumPopup = (props) => {
             className="nodrag"
             type="text"
             value={sumName}
-            onChange={(e) => {
-              setInputVal(e);
-              setSumName(e.target.value);
-            }}
+            onChange={handleNameChange}
           />
-          {sumNameExists && (
+          {sumExists && (
             <span style={{ color: "red" }}>
               Sum name already exists. Please choose another name.
             </span>
@@ -124,21 +121,13 @@ const SumPopup = (props) => {
             placeholder="{{input:data1}}"
             value={variable1}
             onChange={(e) => {
-              setInputVal(e);
               setVariable1(e.target.value);
             }}
           />
-          <select
-            value={variable1}
-            onChange={(e) => setVariable1(e.target.value)}
-          >
-            <option value="">Select a variable or sum</option>
-            {availableVarsAndSums.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+          <Dropdown
+              options={availableOptions}
+              onSelect={handleSelectChange1}
+            />
         </label>
         <label>
           <span>Input value 2</span>
@@ -148,24 +137,16 @@ const SumPopup = (props) => {
             placeholder="{{input:data2}}"
             value={variable2}
             onChange={(e) => {
-              setInputVal(e);
               setVariable2(e.target.value);
             }}
           />
-          <select
-            value={variable2}
-            onChange={(e) => setVariable2(e.target.value)}
-          >
-            <option value="">Select a variable or sum</option>
-            {availableVarsAndSums.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+          <Dropdown
+              options={availableOptions}
+              onSelect={handleSelectChange2}
+            />
         </label>
         <button onClick={handlePopupClick}>Cancel</button>
-        {!sumNameExists && <button onClick={handleStoreSum}>Save</button>}
+        {!sumExists && <button onClick={handleStoreSum}>Save</button>}
         <DeleteNodeButton nodeId={id} />
       </div>
       <Handle type="target" position="top" isConnectable={true} id="sum-b" />

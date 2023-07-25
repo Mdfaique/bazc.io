@@ -11,9 +11,9 @@ const Dropdown = ({ options, selectedValue, onSelect, onChange }) => {
   return (
     <select value={selectedValue} onChange={handleSelect} onClick={onChange}>
       <option value="">Select a variable or sum</option>
-      {options.map((name) => (
-        <option key={name} value={name}>
-          {name}
+      {options.map((opt) => (
+        <option key={opt.name} value={opt.value}>
+          {`steps.${opt.name}.${opt.type}`}
         </option>
       ))}
     </select>
