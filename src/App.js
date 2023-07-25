@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import ReactFlow, { Background, Panel, MiniMap,Controls } from "reactflow";
+import ReactFlow, { Background, Panel, MiniMap, Controls } from "reactflow";
 import { shallow } from "zustand/shallow";
 import { useStore } from "./store";
 import Console from "./nodes/console";
@@ -24,6 +24,9 @@ const nodeTypes = {
 
 const App = () => {
   const store = useStore(selector, shallow);
+  const deleteAllNodesAndData = useStore(
+    (state) => state.deleteAllNodesAndData
+  );
 
   return (
     <ReactFlow
@@ -61,9 +64,12 @@ const App = () => {
           className="add-console-btn">
           Edges
         </button>
+        <button onClick={deleteAllNodesAndData} className="add-console-btn">
+          Del All Nodes
+        </button>
       </Panel>
-      <Controls/>
-        <MiniMap />
+      <Controls />
+      <MiniMap />
       <Background />
     </ReactFlow>
   );

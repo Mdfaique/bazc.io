@@ -43,6 +43,15 @@ const Console = ({ id }) => {
   // Get the list of available data names from allNodesData
   const availableData = allNodesData.map((node) => node.name);
 
+  const generateOptionFormat = (type, name) => {
+    if (type === "variable") {
+      return `{{steps.${name}.input}}`;
+    } else if (type === "sum") {
+      return `{{steps.${name}.output}}`;
+    }
+    return name;
+  };
+
   return (
     <div className="node-wrapper console-node-wrapper">
       <div className="node-component console-component">
@@ -67,7 +76,11 @@ const Console = ({ id }) => {
               <option value="">Select data</option>
               {availableData.map((data) => (
                 <option key={data} value={data}>
-                  {data}
+                  {/* {data} */}
+                  {generateOptionFormat(
+                    allNodesData.find((node) => node.name === data)?.type,
+                    data
+                  )}
                 </option>
               ))}
             </select>

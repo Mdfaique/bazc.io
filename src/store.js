@@ -117,6 +117,14 @@ export const useStore = create((set, get) => ({
       });
     }
   },
+
+  deleteAllNodesAndData() {
+    // Clear the nodes and edges arrays
+    set({ nodes: [], edges: [] });
+
+    // Clear allNodesData array
+    allNodesData.splice(0, allNodesData.length);
+  },
 }));
 
 // Call the `loadFromLocalStorage` function on initial load to load the saved nodes and edges
