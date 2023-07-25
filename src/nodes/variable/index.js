@@ -5,7 +5,7 @@ import { useStore } from "../../store";
 import "./style.css";
 import allNodesData from "../../allNodesData";
 import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
-import Dropdown from "../../component/Dropdown/Dropdown";
+// import Dropdown from "../../component/Dropdown/Dropdown";
 
 const selector = (id) => (store) => ({
   setInputVal: (e) => store.updateNode(id, { inputVal: e.target.value }),
@@ -28,7 +28,6 @@ const VariablePopup = (props) => {
   const handlePopupClick = () => {
     setPopupVisible(false);
   };
-
 
   const handleStoreVariable = () => {
     setPopupVisible(false);
@@ -73,24 +72,42 @@ const VariablePopup = (props) => {
 
   const handleInputChange = (e) => {
     setInputVal(e);
+    console.log("e", e);
     setVariableVal(e.target.value);
+    console.log("e.target.value", e.target.value);
   };
 
-  const handleSelectChange = (selectedValue) => {
-    setSelectedVariable(selectedValue);
+  // const handleSelectChange = (selectedValue) => {
+  //   setSelectedVariable(selectedValue);
+  //   const selectedNode = allNodesData.find(
+  //     (node) => node.name === selectedValue
+  //   );
+  //   if (selectedNode) {
+  //     setVariableVal(selectedNode.value || "");
+  //   }
+  // };
+
+  const handleSelectChange = (e) => {
+    const selectedVariable = e.target.value;
+    console.log("selectedVariable", selectedVariable);
+    setSelectedVariable(selectedVariable);
+
+    // Store the selected variable in its own state
     const selectedNode = allNodesData.find(
-      (node) => node.name === selectedValue
+      (node) => node.name === selectedVariable
     );
     if (selectedNode) {
+      console.log("selectedNode", selectedNode);
       setVariableVal(selectedNode.value || "");
+      // setVariableVal(selectedVariable);
     }
   };
 
-   // Get the list of available variable names from allNodesData
-   const availableVariables = allNodesData
-   .filter((node) => node.type === "variable" && node.id !== id) // Filter out the current node's name
-   .map((node) => node.name);
-   
+  // Get the list of available variable names from allNodesData
+  const availableVariables = allNodesData
+    .filter((node) => node.type === "variable" && node.id !== id) // Filter out the current node's name
+    .map((node) => node.name);
+
   // Calculate variableExists dynamically using useMemo
   const variableExists = useMemo(() => {
     return allNodesData.some(
@@ -125,19 +142,14 @@ const VariablePopup = (props) => {
               placeholder="Type or select from dropdown"
               onChange={handleInputChange}
             />
-            {/* <select value={selectedVariable} onChange={handleSelectChange}>
+            <select value={selectedVariable} onChange={handleSelectChange}>
               <option value="">Select a variable</option>
               {availableVariables.map((variable) => (
                 <option key={variable} value={variable}>
-                  {variable}
+                  {`{{steps.${variable}.input}}`}
                 </option>
               ))}
-            </select> */}
-            <Dropdown
-              options={availableVariables}
-              onSelect={handleSelectChange}
-              selectedValue={selectedVariable}
-            />
+            </select>
           </div>
         </label>
         <button onClick={handlePopupClick}>Cancel</button>

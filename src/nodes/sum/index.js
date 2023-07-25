@@ -95,6 +95,15 @@ const SumPopup = (props) => {
     )
     .map((node) => node.name);
 
+  const generateOptionFormat = (type, name) => {
+    if (type === "variable") {
+      return `{{steps.${name}.input}}`;
+    } else if (type === "sum") {
+      return `{{steps.${name}.output}}`;
+    }
+    return name;
+  };
+
   return (
     <div className="node-wrapper sum-node-wrapper">
       <div className="node-component sum-component">
@@ -135,7 +144,11 @@ const SumPopup = (props) => {
             <option value="">Select a variable or sum</option>
             {availableVarsAndSums.map((name) => (
               <option key={name} value={name}>
-                {name}
+                {/* {name} */}
+                {generateOptionFormat(
+                  allNodesData.find((node) => node.name === name)?.type,
+                  name
+                )}
               </option>
             ))}
           </select>
@@ -159,7 +172,11 @@ const SumPopup = (props) => {
             <option value="">Select a variable or sum</option>
             {availableVarsAndSums.map((name) => (
               <option key={name} value={name}>
-                {name}
+                {/* {name} */}
+                {generateOptionFormat(
+                  allNodesData.find((node) => node.name === name)?.type,
+                  name
+                )}
               </option>
             ))}
           </select>
