@@ -4,7 +4,7 @@ import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
 import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
-import Dropdown from "../../component/Dropdown/Dropdown";
+import Dropdown from "../../component/Dropdown";
 
 const SumPopup = (props) => {
   const {
@@ -113,7 +113,7 @@ const SumPopup = (props) => {
             </span>
           )}
         </label>
-        <label>
+        <label className="input-dropdown-label">
           <span>Input value 1</span>
           <input
             className="nodrag"
@@ -129,7 +129,7 @@ const SumPopup = (props) => {
               onSelect={handleSelectChange1}
             />
         </label>
-        <label>
+        <label className="input-dropdown-label">
           <span>Input value 2</span>
           <input
             className="nodrag"

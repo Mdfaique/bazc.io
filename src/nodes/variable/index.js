@@ -4,7 +4,7 @@ import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
 import "./style.css";
 import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton";
-import Dropdown from "../../component/Dropdown/Dropdown";
+import Dropdown from "../../component/Dropdown";
 
 const VariablePopup = (props) => {
   const {
@@ -91,20 +91,20 @@ const VariablePopup = (props) => {
             <span style={{ color: "red" }}>Choose another name</span>
           )}
         </label>
-        <label>
+        <label className="input-dropdown-label">
           <span>Input value</span>
           <div>
             <input
               className="nodrag"
               type="number"
               value={variableVal}
-              placeholder="Type or select from dropdown"
+              placeholder={availableVariables.length ? "Type or select from dropdown" : "Enter value"}
               onChange={handleInputChange}
             />
-            <Dropdown
+            {availableVariables.length ? <Dropdown
               options={availableVariables}
               onSelect={handleSelectChange}
-            />
+            /> : null}
           </div>
         </label>
         <button onClick={handlePopupClick}>Cancel</button>

@@ -58,16 +58,19 @@ export const useStore = create((set, get) => ({
 
   createNode(type, additionalData) {
     const id = nanoid();
-    const position = { x: 100, y: 100 };
-    const newNode = { id, type, position, data: additionalData };
-
-    set({ nodes: [...get().nodes, newNode] });
-
-    // Automatically connect nodes when a new node is added
     const nodesLength = get().nodes.length;
-    if (nodesLength > 1) {
-      const prevNodeId = get().nodes[nodesLength - 2].id;
-      const newNodeId = get().nodes[nodesLength - 1].id;
+    const position = {
+      x: 100, // Set the initial x-coordinate for the new node
+      y: 100 + nodesLength * 100, // Add a gap of 100px for each node
+    };
+    const newNode = { id, type, position, data: additionalData };
+  
+    set({ nodes: [...get().nodes, newNode] });
+  
+    // Automatically connect nodes when a new node is added
+    if (nodesLength > 0) {
+      const prevNodeId = get().nodes[nodesLength - 1].id;
+      const newNodeId = newNode.id;
       get().connectNodes(prevNodeId, newNodeId);
     }
   },
@@ -121,9 +124,8 @@ export const useStore = create((set, get) => ({
   deleteAllNodesAndData() {
     // Clear the nodes and edges arrays
     set({ nodes: [], edges: [] });
-
-    // Clear allNodesData array
-    allNodesData.splice(0, allNodesData.length);
+    localStorage.setItem("nodes", JSON.stringify([]));
+    localStorage.setItem("edges", JSON.stringify([]));
   },
 }));
 

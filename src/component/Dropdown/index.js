@@ -1,6 +1,7 @@
 // Dropdown.js
 
 import React from "react";
+import './style.css';
 
 const Dropdown = ({ options, selectedValue, onSelect, onChange }) => {
   const handleSelect = (event) => {

@@ -18,7 +18,7 @@
   border-radius: 18px;
   width: 18rem;
   height: 100%;
-  background-color: #80008047;
+  background-color: #c3adc3;
 }
 
 .node-component {
@@ -48,6 +48,7 @@
   border: none;
   border: 1px solid rgb(184 28 223);
   background-color: transparent;
+  width: 85%;
 }
 
 .node-component input:focus {
@@ -75,4 +76,19 @@
   top: 25px;
   left: 14px;
   font-weight: 600;
+}
+
+.node-wrapper  button {
+  width: 90%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  margin: auto;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(120, 155, 202);
+}
+
+.node-wrapper  button:hover {
+  background-color: rgb(100, 139, 190);
 }
