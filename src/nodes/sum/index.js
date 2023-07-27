@@ -83,7 +83,7 @@ const SumPopup = (props) => {
     setSumName(newName);
 
     const sumExists = store?.nodes?.some(
-      (node) => node?.data?.name === newName && node.id !== id
+      (node) => node?.data?.user_defined_name === newName && node.id !== id
     );
     setSumExists(sumExists);
   };

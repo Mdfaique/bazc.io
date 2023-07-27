@@ -135,7 +135,7 @@ const Variable = ({ id }) => {
 
   const [variableName, setVariableName] = useState(currentNode?.data?.user_defined_name || "");
   const [variableVal, setVariableVal] = useState(currentNode?.data?.input_value || "");
-  const [displayVal, setDisplayVal] = useState(currentNode?.data?.selected_value || "");
+  const [displayVal, setDisplayVal] = useState(currentNode?.data?.selected_value || undefined);
   const [popupVisible, setPopupVisible] = useState(false);
 
   const handlePopupClick = () => {
