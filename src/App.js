@@ -6,6 +6,7 @@ import { useStore } from "./store";
 import Console from "./nodes/console";
 import Variable from "./nodes/variable";
 import Sum from "./nodes/sum";
+import CustomNode from "./nodes/customNode";
 
 const selector = (store) => ({
   nodes: store.nodes,
@@ -20,6 +21,7 @@ const nodeTypes = {
   console: Console,
   variable: Variable,
   sum: Sum,
+  CustomNode: CustomNode,
 };
 
 const App = () => {
@@ -32,28 +34,26 @@ const App = () => {
     function formatFunctionString(nodeData, indent = 0) {
       const indentSpaces = " ".repeat(indent * 2);
       if (!nodeData) return "";
-  
+
       if (nodeData.sub_type === "variable") {
         return `${indentSpaces}let ${nodeData.user_defined_name} = ${nodeData.input_value};`;
       }
-  
+
       if (nodeData.block_type === "action" && nodeData.sub_type === "sum") {
         return `${indentSpaces}let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].selected_value}, ${nodeData.input_value[1].selected_value});`;
       }
-  
+
       return "";
     }
-  
+
     const validNodes = store.nodes.filter((node) => node?.data); // Filter out nodes without data
     const functionStr = `function() {
   ${validNodes.map((node) => formatFunctionString(node?.data, 1)).join("\n")}
   }`;
-  
+
     console.log(functionStr);
   };
-  
-  
-  
+
   return (
     <ReactFlow
       nodes={store.nodes}
@@ -99,6 +99,15 @@ const App = () => {
         </button>
         <button onClick={handleExecute} className="add-console-btn">
           Execute
+        </button>
+        <button
+          onClick={() => {
+            console.log("Custom clicked");
+            store.createNode("CustomNode");
+          }}
+          className="add-console-btn"
+        >
+          CustomNode
         </button>
       </div>
       <Controls />
