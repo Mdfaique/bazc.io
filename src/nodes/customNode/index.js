@@ -15,6 +15,7 @@ const VariablePopup = (props) => {
     displayVal,
     inputParametersProp,
     outputParameterProp,
+    logicInputProp,
   } = props;
 
   const [variableExists, setVariableExists] = useState(false);
@@ -46,6 +47,7 @@ const VariablePopup = (props) => {
   // State to manage the input parameters as an array
   const [inputParameters, setInputParameters] = useState(inputParametersProp);
   const [outputParameter, setOutputParameter] = useState(outputParameterProp);
+  const [logicInput, SetLogicInput] = useState(logicInputProp);
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
@@ -90,6 +92,7 @@ const VariablePopup = (props) => {
       return: false,
       input_parameters: paramsData,
       output_parameters: outputParameter ? [{ name: outputParameter }] : [],
+      logic_data: logicInput,
     };
 
     setInputVal(id, data);
@@ -124,8 +127,22 @@ const VariablePopup = (props) => {
     // Update the node data with the new output parameter value
     const newData = {
       ...data,
-      output_value: newValue, // Use "output_value" field to store the output parameter name
+      logic_value: newValue, // Use "output_value" field to store the output parameter name
     };
+    setInputVal(id, newData);
+  };
+
+  // Function to handle changes in the logic box value
+  const handleLogicInput = (e) => {
+    const newValue = e.target.value;
+    SetLogicInput(newValue);
+
+    // Update the node data with the new output parameter value
+    const newData = {
+      ...data,
+      logic_value: newValue, // Use "output_value" field to store the output parameter name
+    };
+    // console.log(newData);
     setInputVal(id, newData);
   };
 
@@ -174,6 +191,14 @@ const VariablePopup = (props) => {
           value={outputParameter}
           onChange={handleOutputParameter}
         />
+        <span>Provide Logic</span>
+        <input
+          className="nodrag"
+          type="text"
+          placeholder="Enter output param name"
+          value={logicInput}
+          onChange={handleLogicInput}
+        />
         <button onClick={handlePopupClick}>Cancel</button>
         {!variableExists && (
           <button onClick={() => handleStoreVariable(variableVal)}>Save</button>
@@ -214,6 +239,10 @@ const CustomNode = ({ id }) => {
     currentNode?.data?.output_value || ""
   );
 
+  const [logicInput, SetLogicInput] = useState(
+    currentNode?.data?.logic_data || ""
+  );
+
   // Function to update input parameters in the CustomNode component
   const handleUpdateInputParams = (params) => {
     setInputParameters(params);
@@ -230,6 +259,18 @@ const CustomNode = ({ id }) => {
     } else {
       setOutputParameter("");
       console.log("No output_parameters found.");
+    }
+
+    // too set custom node logic box value on reopen of popup
+    if (
+      currentNode?.data?.logic_data &&
+      currentNode?.data?.logic_data !== undefined
+    ) {
+      const val = currentNode?.data?.logic_data || "";
+      SetLogicInput(val);
+    } else {
+      SetLogicInput("");
+      console.log("No logic_data found.");
     }
   };
 
@@ -254,6 +295,7 @@ const CustomNode = ({ id }) => {
       onUpdateInputParams={handleUpdateInputParams} // Pass the callback function to the VariablePopup
       outputParameter={outputParameter} // Pass the output parameter name to the VariablePopup
       outputParameterProp={outputParameter} // Pass the output parameter name as a prop to the VariablePopup
+      logicInputProp={logicInput}
     />
   );
 };
