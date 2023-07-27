@@ -6,6 +6,7 @@ import { useStore } from "./store";
 import Console from "./nodes/console";
 import Variable from "./nodes/variable";
 import Sum from "./nodes/sum";
+import CustomNode from "./nodes/customNode";
 
 const selector = (store) => ({
   nodes: store.nodes,
@@ -20,6 +21,7 @@ const nodeTypes = {
   console: Console,
   variable: Variable,
   sum: Sum,
+  CustomNode: CustomNode,
 };
 
 const App = () => {
@@ -117,6 +119,15 @@ const App = () => {
         </button>
         <button onClick={handleExecute} className="add-console-btn">
           Execute
+        </button>
+        <button
+          onClick={() => {
+            console.log("Custom clicked");
+            store.createNode("CustomNode");
+          }}
+          className="add-console-btn"
+        >
+          CustomNode
         </button>
       </div>
       <Controls />
