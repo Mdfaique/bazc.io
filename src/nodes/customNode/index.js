@@ -14,6 +14,7 @@ const VariablePopup = (props) => {
     variableVal,
     displayVal,
     inputParametersProp,
+    outputParameterProp,
   } = props;
 
   const [variableExists, setVariableExists] = useState(false);
@@ -44,6 +45,7 @@ const VariablePopup = (props) => {
 
   // State to manage the input parameters as an array
   const [inputParameters, setInputParameters] = useState(inputParametersProp);
+  const [outputParameter, setOutputParameter] = useState(outputParameterProp);
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
@@ -61,7 +63,7 @@ const VariablePopup = (props) => {
     const updatedParams = [...inputParameters];
     updatedParams[index][field] = value;
     setInputParameters(updatedParams);
-    console.log(updatedParams);
+    // console.log(updatedParams);
 
     props.onUpdateInputParams(updatedParams);
   };
@@ -87,6 +89,7 @@ const VariablePopup = (props) => {
       output_value: null,
       return: false,
       input_parameters: paramsData,
+      output_parameters: outputParameter ? [{ name: outputParameter }] : [],
     };
 
     setInputVal(id, data);
@@ -111,6 +114,19 @@ const VariablePopup = (props) => {
     updatedParams.splice(index, 1);
     setInputParameters(updatedParams);
     props.onUpdateInputParams(updatedParams); // Update the inputParametersProp whenever inputParameters state changes
+  };
+
+  // Function to handle changes in the output parameter value
+  const handleOutputParameter = (e) => {
+    const newValue = e.target.value;
+    setOutputParameter(newValue);
+
+    // Update the node data with the new output parameter value
+    const newData = {
+      ...data,
+      output_value: newValue, // Use "output_value" field to store the output parameter name
+    };
+    setInputVal(id, newData);
   };
 
   return (
@@ -150,7 +166,14 @@ const VariablePopup = (props) => {
           </div>
         ))}
         <button onClick={handleAddParameter}>+</button>
-
+        <span>Output Parameter Name</span>
+        <input
+          className="nodrag"
+          type="text"
+          placeholder="Enter output param name"
+          value={outputParameter}
+          onChange={handleOutputParameter}
+        />
         <button onClick={handlePopupClick}>Cancel</button>
         {!variableExists && (
           <button onClick={() => handleStoreVariable(variableVal)}>Save</button>
@@ -185,7 +208,11 @@ const CustomNode = ({ id }) => {
       ? existingParams
       : [{ name: "", value: "" }];
   });
-  
+
+  // New state variable to hold the output parameter name
+  const [outputParameter, setOutputParameter] = useState(
+    currentNode?.data?.output_value || ""
+  );
 
   // Function to update input parameters in the CustomNode component
   const handleUpdateInputParams = (params) => {
@@ -194,6 +221,16 @@ const CustomNode = ({ id }) => {
 
   const handlePopupClick = () => {
     setPopupVisible(true);
+    if (
+      currentNode?.data?.output_parameters &&
+      currentNode.data.output_parameters.length > 0
+    ) {
+      const val = currentNode.data.output_parameters[0].name || "";
+      setOutputParameter(val);
+    } else {
+      setOutputParameter("");
+      console.log("No output_parameters found.");
+    }
   };
 
   return !popupVisible ? (
@@ -215,6 +252,8 @@ const CustomNode = ({ id }) => {
       id={id}
       inputParametersProp={inputParameters} // Pass the inputParameters to the VariablePopup
       onUpdateInputParams={handleUpdateInputParams} // Pass the callback function to the VariablePopup
+      outputParameter={outputParameter} // Pass the output parameter name to the VariablePopup
+      outputParameterProp={outputParameter} // Pass the output parameter name as a prop to the VariablePopup
     />
   );
 };
