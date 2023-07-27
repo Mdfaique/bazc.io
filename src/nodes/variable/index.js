@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Handle } from "reactflow";
 import { shallow } from "zustand/shallow";
 import { useStore } from "../../store";
@@ -7,16 +7,7 @@ import DeleteNodeButton from "../../component/DeleteNodeButton/DeleteNodeButton"
 import Dropdown from "../../component/Dropdown";
 
 const VariablePopup = (props) => {
-  const {
-    id,
-    variableName,
-    setVariableName,
-    setPopupVisible,
-    variableVal,
-    setVariableVal,
-    displayVal,
-    setDisplayVal
-  } = props;
+  const {id,variableName,setVariableName,setPopupVisible,variableVal,setVariableVal,displayVal,setDisplayVal} = props;
 
   const [variableExists, setVariableExists] = useState(false);
   
@@ -48,14 +39,13 @@ const VariablePopup = (props) => {
     const newName = e.target.value;
     setVariableName(newName);
 
-    // Check if the entered variable name already exists in the nodes
     const variableExists = store?.nodes?.some(
-      (node) => node?.data?.name === newName && node.id !== id
+      (node) => node?.data?.user_defined_name === newName && node.id !== id
     );
+
     setVariableExists(variableExists);
   };
 
-  // Function to handle changes in the input value
   const handleInputChange = (e) => {
     setVariableVal(e.target.value);
     setDisplayVal(undefined);
@@ -65,7 +55,6 @@ const VariablePopup = (props) => {
     setPopupVisible(false);
   };
 
-  // Function to handle saving the variable data
   const handleStoreVariable = (value) => {
 
       const data = {
@@ -87,7 +76,7 @@ const VariablePopup = (props) => {
 
     const edges = useStore.getState().edges;
     useStore.getState().updateNodesAndEdges(nodes, edges);
-    setPopupVisible(false); // Close the popup after saving
+    setPopupVisible(false);
   };
 
   const availableVariables = store.nodes?.length > 1 ? store.nodes.filter((node) => (node?.id !== id || (node?.data?.system_defined_name    === undefined) || (node?.data?.system_defined_name === ''))).map((node) => node.data) : [];
@@ -120,7 +109,7 @@ const VariablePopup = (props) => {
             <input
               className="nodrag"
               type="text"
-              value={displayVal === "" ? variableVal : displayVal}
+              value={displayVal ?? variableVal}
               placeholder={availableVariables.length ? "Type or select from dropdown" : "Enter value"}
               onChange={handleInputChange}
             />
