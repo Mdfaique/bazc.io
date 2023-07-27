@@ -110,6 +110,7 @@ const VariablePopup = (props) => {
     const updatedParams = [...inputParameters];
     updatedParams.splice(index, 1);
     setInputParameters(updatedParams);
+    props.onUpdateInputParams(updatedParams); // Update the inputParametersProp whenever inputParameters state changes
   };
 
   return (
