@@ -12,16 +12,11 @@ const VariablePopup = (props) => {
     setVariableName,
     setPopupVisible,
     variableVal,
-    setVariableVal,
     displayVal,
-    setDisplayVal,
-    inputParametersProp
+    inputParametersProp,
   } = props;
 
   const [variableExists, setVariableExists] = useState(false);
-
-   
-
 
   const data = {
     block_type: "CustomNode",
@@ -50,7 +45,6 @@ const VariablePopup = (props) => {
   // State to manage the input parameters as an array
   const [inputParameters, setInputParameters] = useState(inputParametersProp);
 
-
   const handleNameChange = (e) => {
     const newName = e.target.value;
     setVariableName(newName);
@@ -62,18 +56,14 @@ const VariablePopup = (props) => {
     setVariableExists(variableExists);
   };
 
-  //   // Function to handle changes in the input value
-  //   const handleInputChange = (e) => {
-  //     setVariableVal(e.target.value);
-  //     setDisplayVal(undefined);
-  //   };
-
   // Function to handle changes in the input value
   const handleInputChange = (index, field, value) => {
     const updatedParams = [...inputParameters];
     updatedParams[index][field] = value;
     setInputParameters(updatedParams);
     console.log(updatedParams);
+
+    props.onUpdateInputParams(updatedParams);
   };
 
   const handlePopupClick = () => {
@@ -120,6 +110,7 @@ const VariablePopup = (props) => {
     const updatedParams = [...inputParameters];
     updatedParams.splice(index, 1);
     setInputParameters(updatedParams);
+    props.onUpdateInputParams(updatedParams); // Update the inputParametersProp whenever inputParameters state changes
   };
 
   return (
@@ -194,6 +185,12 @@ const CustomNode = ({ id }) => {
       ? existingParams
       : [{ name: "", value: "" }];
   });
+  
+
+  // Function to update input parameters in the CustomNode component
+  const handleUpdateInputParams = (params) => {
+    setInputParameters(params);
+  };
 
   const handlePopupClick = () => {
     setPopupVisible(true);
@@ -217,6 +214,7 @@ const CustomNode = ({ id }) => {
       setDisplayVal={setDisplayVal}
       id={id}
       inputParametersProp={inputParameters} // Pass the inputParameters to the VariablePopup
+      onUpdateInputParams={handleUpdateInputParams} // Pass the callback function to the VariablePopup
     />
   );
 };
