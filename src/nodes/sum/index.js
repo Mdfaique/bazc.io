@@ -45,7 +45,8 @@ const SumPopup = (props) => {
     system_defined_name: displayVal2 === "" ? `steps.${sumName}.input2` : displayVal2, selected_value: selectedValue2 === "" ? variable2 : selectedValue2, user_defined_name: variable2},
     ],
     output_value: sum(variable1, variable2),
-    return: true
+    return: true,
+    function_body: `return ( v1 + v2 )`
     }
 
   const selector = (id) => (store) => ({

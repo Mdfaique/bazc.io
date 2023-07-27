@@ -29,31 +29,49 @@ const App = () => {
   );
 
   const handleExecute = () => {
-    function formatFunctionString(nodeData, indent = 0) {
-      const indentSpaces = " ".repeat(indent * 2);
+    function actionBody(nodeData) {
+      if (!nodeData || nodeData.block_type !== "action") return;
+      const totalInputParams = nodeData?.input_value?.length;
+      const inputParams = [];
+      for (let i = 0; i < totalInputParams; i++) {
+        inputParams.push(`v${i + 1}`);
+      }
+      return `${"    "}function ${nodeData.sub_type}(${inputParams.join(", ")}) {
+      ${nodeData?.function_body}
+    };`;
+    }
+
+    function formatFunctionString(nodeData) {
       if (!nodeData) return "";
-  
+
       if (nodeData.sub_type === "variable") {
-        return `${indentSpaces}let ${nodeData.user_defined_name} = ${nodeData.input_value};`;
+        return `${"     "}let ${nodeData.user_defined_name} = ${nodeData.input_value};`;
       }
-  
+
       if (nodeData.block_type === "action" && nodeData.sub_type === "sum") {
-        return `${indentSpaces}let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].selected_value}, ${nodeData.input_value[1].selected_value});`;
+        return `
+      let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].selected_value}, ${nodeData.input_value[1].selected_value});
+      print(${nodeData.user_defined_name} )`;
       }
-  
+
       return "";
     }
-  
+
     const validNodes = store.nodes.filter((node) => node?.data); // Filter out nodes without data
-    const functionStr = `function() {
-  ${validNodes.map((node) => formatFunctionString(node?.data, 1)).join("\n")}
-  }`;
-  
+    const functionStr = `${validNodes.map((node) => actionBody(node?.data)).join("\n")}
+    
+    function print(msg) {
+      console.log(msg);
+    };
+
+    function testProgram() {
+  ${validNodes.map((node) => formatFunctionString(node?.data)).join("\n")}
+  };
+  `;
+
     console.log(functionStr);
   };
-  
-  
-  
+
   return (
     <ReactFlow
       nodes={store.nodes}
