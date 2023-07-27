@@ -7,6 +7,7 @@
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  width: 10rem;
 }
 
 .add-console-btn:hover {
@@ -91,4 +92,15 @@
 
 .node-wrapper  button:hover {
   background-color: rgb(100, 139, 190);
+}
+
+.panel {
+  position: fixed;
+    display: flex;
+    flex-direction: column;
+    right: 0;
+    width: 20vw;
+    top: 20vh;
+    align-items: center;
+    gap: 5px;
 }

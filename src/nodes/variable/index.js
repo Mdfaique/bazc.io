@@ -13,13 +13,25 @@ const VariablePopup = (props) => {
     setVariableName,
     setPopupVisible,
     variableVal,
-    setVariableVal
+    setVariableVal,
+    displayVal,
+    setDisplayVal
   } = props;
 
   const [variableExists, setVariableExists] = useState(false);
-
+  
+  const data = {
+    block_type: "flow_control",
+    sub_type: "variable",
+    user_defined_name: variableName,
+    system_defined_name: `steps.${variableName}.input`,
+    selected_value: displayVal,
+    input_value: variableVal,
+    output_value: null,
+    return: false
+    }
   const selector = (id) => (store) => ({
-    setInputVal: (e) => store.updateNode(id, { value: variableVal, name: variableName, type: 'input'  }),
+    setInputVal: (e) => store.updateNode(id, data),
     setType: (e) => store.updateNode(id, { type: e.target.value }),
     nodes: store.nodes,
   });
@@ -46,6 +58,7 @@ const VariablePopup = (props) => {
   // Function to handle changes in the input value
   const handleInputChange = (e) => {
     setVariableVal(e.target.value);
+    setDisplayVal(undefined);
   };
 
   const handlePopupClick = () => {
@@ -54,24 +67,34 @@ const VariablePopup = (props) => {
 
   // Function to handle saving the variable data
   const handleStoreVariable = (value) => {
-      setInputVal(id, { name: variableName, value: value, type: 'input' } );
-      const nodes = useStore.getState().nodes.map((node) =>
-      node.id === id ? { ...node, data: { ...node.data, name: variableName, value: variableVal, type: 'input' } } : node
-    );
-    const edges = useStore.getState().edges;
 
+      const data = {
+        block_type: "flow_control",
+        sub_type: "variable",
+        user_defined_name: variableName,
+        system_defined_name: `steps.${variableName}.input`,
+        selected_value: displayVal,
+        input_value: value,
+        output_value: null,
+        return: false
+        }
+
+      setInputVal(id, data);
+
+      const nodes = useStore.getState().nodes.map((node) =>
+      node.id === id ? { ...node, data } : node
+    );
+
+    const edges = useStore.getState().edges;
     useStore.getState().updateNodesAndEdges(nodes, edges);
-      setPopupVisible(false); // Close the popup after saving
+    setPopupVisible(false); // Close the popup after saving
   };
 
-  const availableVariables = store.nodes?.length > 1 ? store.nodes.filter((node) => node?.id !== id).map((node) => ({
-    name: node?.data?.name,
-    value: node?.data?.value,
-    type: node?.data?.type
-  })) : [];
+  const availableVariables = store.nodes?.length > 1 ? store.nodes.filter((node) => (node?.id !== id || (node?.data?.system_defined_name    === undefined) || (node?.data?.system_defined_name === ''))).map((node) => node.data) : [];
 
   const handleSelectChange = (selectedValue) => {
-    setVariableVal(selectedValue);
+    setVariableVal(selectedValue?.input_value);
+    setDisplayVal(selectedValue?.system_defined_name);
   }
 
   return (
@@ -96,8 +119,8 @@ const VariablePopup = (props) => {
           <div>
             <input
               className="nodrag"
-              type="number"
-              value={variableVal}
+              type="text"
+              value={displayVal === "" ? variableVal : displayVal}
               placeholder={availableVariables.length ? "Type or select from dropdown" : "Enter value"}
               onChange={handleInputChange}
             />
@@ -121,8 +144,9 @@ const Variable = ({ id }) => {
   const storeNodes = useStore((state) => state.nodes, shallow);
   const currentNode = storeNodes.find((node) => node.id === id);
 
-  const [variableName, setVariableName] = useState(currentNode?.data?.name || "");
-  const [variableVal, setVariableVal] = useState(currentNode?.data?.value || "");
+  const [variableName, setVariableName] = useState(currentNode?.data?.user_defined_name || "");
+  const [variableVal, setVariableVal] = useState(currentNode?.data?.input_value || "");
+  const [displayVal, setDisplayVal] = useState(currentNode?.data?.selected_value || "");
   const [popupVisible, setPopupVisible] = useState(false);
 
   const handlePopupClick = () => {
@@ -143,6 +167,8 @@ const Variable = ({ id }) => {
       variableName={variableName}
       setVariableName={setVariableName}
       setPopupVisible={setPopupVisible}
+      displayVal={displayVal}
+      setDisplayVal={setDisplayVal}
       id={id}
     />
   );
