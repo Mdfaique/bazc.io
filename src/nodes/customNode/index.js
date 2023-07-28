@@ -175,8 +175,8 @@ const Variable = ({ id }) => {
 
   return !popupVisible ? (
     <div className="node-box" onClick={handlePopupClick}>
-      <p>Variable</p>
-      <span>{variableName || "New variable"}</span>
+      <p>Custom Node</p>
+      <span>{variableName || "Custom Node"}</span>
       <Handle type="target" position="top" isConnectable={true} id="b" />
       <Handle type="source" position="bottom" isConnectable={true} id="a" />
     </div>
