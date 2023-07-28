@@ -11,8 +11,8 @@ const VariablePopup = (props) => {
   const [variableExists, setVariableExists] = useState(false);
   
   const data = {
-    block_type: "flow_control",
-    sub_type: "variable",
+    block_type: "action",
+    sub_type: "customNode",
     user_defined_name: variableName,
     system_defined_name: `steps.${variableName}.input`,
     selected_value: displayVal,
@@ -57,8 +57,8 @@ const VariablePopup = (props) => {
   const handleStoreVariable = (value) => {
 
       const data = {
-        block_type: "flow_control",
-        sub_type: "variable",
+        block_type: "action",
+        sub_type: "customNode",
         user_defined_name: variableName,
         system_defined_name: `steps.${variableName}.input`,
         selected_value: displayVal,
@@ -119,6 +119,21 @@ const VariablePopup = (props) => {
     }
     return inputs;
   };
+  const [logicInput, SetLogicInput] = useState("");
+
+  // Function to handle changes in the logic box value
+  const handleLogicInput = (e) => {
+    const newValue = e.target.value;
+    SetLogicInput(newValue);
+
+    // Update the node data with the new output parameter value
+    const newData = {
+      ...data,
+      logic_value: newValue, // Use "output_value" field to store the output parameter name
+    };
+    // console.log(newData);
+    setInputVal(id, newData);
+  };
 
   return (
     <div className="node-wrapper variable-node-wrapper">
@@ -150,6 +165,22 @@ const VariablePopup = (props) => {
           </div>
         </label>
         {displayVal && generateParameterInputs()}
+        <label>
+              Output Type:
+              <select>
+                <option value="number">Number</option>
+                <option value="char">Char</option>
+                <option value="bool">Bool</option>
+              </select>
+            </label>
+            <span>Provide Logic</span>
+        <textarea
+          className="nodrag"
+          type="text"
+          placeholder="Enter Logic"
+          value={logicInput}
+          onChange={handleLogicInput}
+        />
         <button onClick={handlePopupClick}>Cancel</button>
         {!variableExists && <button onClick={()=>handleStoreVariable(variableVal)}>Save</button>}
         <DeleteNodeButton nodeId={id} />
@@ -175,8 +206,8 @@ const Variable = ({ id }) => {
 
   return !popupVisible ? (
     <div className="node-box" onClick={handlePopupClick}>
-      <p>Variable</p>
-      <span>{variableName || "New variable"}</span>
+      <p>Custom Node</p>
+      <span>{variableName || "Custom Node"}</span>
       <Handle type="target" position="top" isConnectable={true} id="b" />
       <Handle type="source" position="bottom" isConnectable={true} id="a" />
     </div>
