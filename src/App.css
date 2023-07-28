@@ -56,6 +56,19 @@
   outline: none;
 }
 
+.node-component textarea {
+  padding: 5px;
+  border-radius: 8px;
+  border: none;
+  border: 1px solid rgb(184 28 223);
+  background-color: transparent;
+  width: 85%;
+}
+
+.node-component textarea:focus {
+  outline: none;
+}
+
 .node-box {
   border-radius: 5px;
   width: 14rem;

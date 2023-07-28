@@ -174,7 +174,7 @@ const VariablePopup = (props) => {
               </select>
             </label>
             <span>Provide Logic</span>
-        <input
+        <textarea
           className="nodrag"
           type="text"
           placeholder="Enter Logic"
