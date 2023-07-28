@@ -94,7 +94,7 @@
   background-color: rgb(100, 139, 190);
 }
 
-.panel {
+/* .panel {
   position: fixed;
     display: flex;
     flex-direction: column;
@@ -103,4 +103,4 @@
     top: 20vh;
     align-items: center;
     gap: 5px;
-}
+} */

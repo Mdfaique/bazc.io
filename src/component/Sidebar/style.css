@@ -1,0 +1,22 @@
+.sidebar-wrapper {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    right: 0;
+    width: 20vw;
+    top: 20vh;
+    align-items: center;
+    gap: 15px;
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
