@@ -1,6 +1,6 @@
 import React, { useRef  } from "react";
 import "./style.css";
-import { useStore } from "../../store";
+import { useStore } from "../../store/store";
 import Button from "../Button";
 
 const BottomBar = () => {

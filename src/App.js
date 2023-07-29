@@ -1,12 +1,13 @@
 import "./App.css";
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import ReactFlow, { Background, MiniMap, Controls } from "reactflow";
 import { shallow } from "zustand/shallow";
-import { useStore } from "./store";
+import { useStore } from "./store/store";
 import Sidebar from "./component/Sidebar";
 import BottomBar from "./component/Bottom-Bar";
 import SidebarData from "./data/sidebar";
 import NodeDisplay from "./component/Node-display";
+import { SidebarDataContext } from "./store/SidebarDataContext";
 
 const selector = (store) => ({
   nodes: store.nodes,
@@ -17,22 +18,26 @@ const selector = (store) => ({
   createNode: store.createNode,
 });
 
-const flowControlNodes = SidebarData.flowControl.map((node) => node.sub_type);
-const actionNodes = SidebarData.action.map((node) => node.sub_type);
-const allNodes = [...flowControlNodes, ...actionNodes];
-
-const nodeTypes = allNodes.reduce((acc, node) => {
-  acc[node] = NodeDisplay;
-  return acc;
-}, {});
-
 const App = () => {
   const store = useStore(selector, shallow);
+  const { sidebarData } = useContext(SidebarDataContext);
+
+  const updatedNodeTypes = React.useMemo(() => {
+    const flowControlNodes = sidebarData.flowControl.map((node) => node.sub_type);
+    const actionNodes = sidebarData.action.map((node) => node.sub_type);
+    const allNodes = [...flowControlNodes, ...actionNodes];
+
+    return allNodes.reduce((acc, node) => {
+      acc[node] = NodeDisplay;
+      return acc;
+    }, {});
+  }, [sidebarData]);
+
   return (
     <>
     <ReactFlow
       nodes={store.nodes}
-      nodeTypes={nodeTypes}
+      nodeTypes={updatedNodeTypes}
       edges={store.edges}
       onNodesChange={store.onNodesChange}
       onEdgesChange={store.onEdgesChange}

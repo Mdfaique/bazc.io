@@ -1,0 +1,36 @@
+.custom-node-wrapper {
+    position: absolute;
+    top: -20vh;
+    right: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #7b7a7aa0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-component {
+    width: 24rem;
+    height: fit-content;
+    max-height: 90vh;
+    padding: 18px;
+    overflow-y:auto;
+}
+
+.custom-component select {
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+    border: 1px solid rgb(184 28 223);
+    background-color: transparent;
+    width: 85%;
+}
+
+.custom-component select:focus {
+    outline: none;
+}
+
+.custom-component textarea {
+    min-height: 5rem;
+}

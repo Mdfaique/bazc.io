@@ -18,6 +18,7 @@ const SidebarData = {
       selected_value: null,
       system_defined_name: null,
       user_defined_name: null,
+      custom: false
     },
   ],
   action: [
@@ -37,7 +38,7 @@ const SidebarData = {
           value: null,
           system_defined_name: null,
           selected_value: null,
-          selected_variable: undefined,
+          selected_variable: null,
           parameter_name: "input_2",
         },
       ],
@@ -48,6 +49,7 @@ const SidebarData = {
       return: true,
       system_defined_name: null,
       user_defined_name: null,
+      custom: false
     },
     {
       block_type: "action",
@@ -69,6 +71,7 @@ const SidebarData = {
       return: false,
       system_defined_name: null,
       user_defined_name: null,
+      custom: false
     },
   ],
 };

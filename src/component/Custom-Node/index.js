@@ -1,30 +1,53 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import Button from "../Button";
+import './style.css';
+import SidebarData from "../../data/sidebar";
+import { SidebarDataContext } from "../../store/SidebarDataContext";
 
-const CustomNode2 = () => {
-  const [logicInput, SetLogicInput] = useState("");
+const CustomNode = (props) => {
+
+  const {setShowCustomNode} = props;
+  const [actionName, setActionName] = useState("");
+  const [logicInput, setLogicInput] = useState("");
   const [displayVal, setDisplayVal] = useState("");
-  const [variableVal, setVariableVal] = useState("");
+  const [inputVals, setInputVals] = useState([]);
+  const [output, setOutput] = useState(undefined);
+
+  const { sidebarData, setSidebarData } = useContext(SidebarDataContext);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
-    console.log(value);
     setDisplayVal(value);
   };
-  
 
+  const handleParameterChange = (index, key, value) => {
+    const updatedInputVals = [...inputVals];
+    if (!updatedInputVals[index]) {
+      updatedInputVals[index] = {};
+    }
+    updatedInputVals[index][key] = value;
+    setInputVals(updatedInputVals);
+  };
 
   const generateParameterInputs = () => {
     const inputs = [];
     for (let i = 1; i <= displayVal; i++) {
+      const index = i - 1; // Adjusted index for array access
+      if (!inputVals[index] || !inputVals[index]["type"]) {
+      }
       inputs.push(
         <div key={i}>
           <div>Parameter {i}</div>
           <div>
             <label>
               Type:
-              <select>
-                <option value="number">Number</option>
-                <option value="char">Char</option>
+              <select
+                onChange={(e) =>
+                  handleParameterChange(index, "type", e.target.value)
+                }
+              ><option value="">Select type</option>
+                <option value="int">Number</option>
+                <option value="string">Char</option>
                 <option value="bool">Bool</option>
               </select>
             </label>
@@ -32,7 +55,12 @@ const CustomNode2 = () => {
           <div>
             <label>
               Name:
-              <input type="text" />
+              <input
+                type="text"
+                onChange={(e) =>
+                  handleParameterChange(index, "parameter_name", e.target.value)
+                }
+              />
             </label>
           </div>
         </div>
@@ -43,23 +71,57 @@ const CustomNode2 = () => {
 
   const handleLogicInput = (e) => {
     const newValue = e.target.value;
-    SetLogicInput(newValue);
+    setLogicInput(newValue);
     console.log(newValue);
   };
 
+  const handleCancel = () => {
+    setShowCustomNode(false);
+  }
+
+  const handleActionName = (e) => {
+    const newName = e.target.value;
+    setActionName(newName);
+  }
+
+  const handleSave = () => {
+    const data = {
+      block_type: "action",
+      sub_type: actionName,
+      total_inputs: displayVal,
+      input_value: inputVals,
+      function_body: logicInput,
+      output_type: output,
+      output_value: undefined,
+      return: output !== undefined ? true : false,
+      system_defined_name: undefined,
+      user_defined_name: undefined,
+      custom: true
+    };
+
+    const updatedSidebarData = { ...sidebarData };
+    updatedSidebarData.action.push(data);
+
+    localStorage.setItem("SidebarData", JSON.stringify(updatedSidebarData));
+  
+    setSidebarData(updatedSidebarData);
+
+    setShowCustomNode(false);
+  }
+
   return (
     <>
-      <div className="node-wrapper variable-node-wrapper">
-        <div className="node-component variable-component">
+      <div className="node-wrapper custom-node-wrapper">
+        <div className="node-component node-wrapper custom-component">
           <p>Custom Node</p>
           <label>
             <span>Name</span>
             <input
               className="nodrag"
               type="text"
-              value=""
+              value={actionName}
               placeholder="Enter custom name"
-              onChange={()=>{console.log("nameINput")}}
+              onChange={handleActionName}
             />
           </label>
           <label className="input-dropdown-label">
@@ -68,7 +130,7 @@ const CustomNode2 = () => {
               <input
                 className="nodrag"
                 type="number"
-                value={displayVal ?? variableVal}
+                value={displayVal}
                 placeholder="Enter value"
                 onChange={handleInputChange}
               />
@@ -77,9 +139,10 @@ const CustomNode2 = () => {
           {displayVal && generateParameterInputs()}
           <label>
             Output Type:
-            <select>
-              <option value="number">Number</option>
-              <option value="char">Char</option>
+            <select onChange={(e)=>setOutput(e.target.value)}>
+            <option value="select">Select output type</option>
+              <option value="int">Number</option>
+              <option value="string">Char</option>
               <option value="bool">Bool</option>
             </select>
           </label>
@@ -91,24 +154,18 @@ const CustomNode2 = () => {
             value={logicInput}
             onChange={handleLogicInput}
           />
-          <button
-            onClick={() => {
-              console.log("canceld");
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => {
-              console.log("saved");
-            }}
-          >
-            Save
-          </button>
+          <Button
+            name="Cancel"
+            onClick={handleCancel}
+          />
+          <Button
+            name="Save"
+            onClick={handleSave}
+          />
         </div>
       </div>
     </>
   );
 };
 
-export default CustomNode2;
+export default CustomNode;

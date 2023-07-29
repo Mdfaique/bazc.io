@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Handle } from "reactflow";
 import { shallow } from "zustand/shallow";
-import { useStore } from "../../store";
+import { useStore } from "../../store/store";
 import Button from "../Button";
 import DeleteNodeButton from "../DeleteNodeButton/DeleteNodeButton";
 import './style.css';
@@ -93,7 +93,7 @@ const Node = (props) => {
           handleInputChange={(value) => handleInputChange(index, value)}
           handleSelectChange={(value) => handleSelectChange(index, value)}
           inputValue={input?.value}
-          inputSelected={input?.selected_value === null}
+          inputSelected={input?.selected_value === null || !input?.selected_value}
           selectedValue={input?.selected_value}
 />
         </label>

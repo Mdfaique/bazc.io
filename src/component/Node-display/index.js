@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Handle } from "reactflow";
 import { shallow } from "zustand/shallow";
-import { useStore } from "../../store";
+import { useStore } from "../../store/store";
 import Node from "../Node";
 
 const NodeDisplay = ({ id }) => {

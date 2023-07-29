@@ -2,7 +2,7 @@ import { applyNodeChanges, applyEdgeChanges } from "reactflow";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 import produce from "immer";
-import NodeDisplay from "./component/Node-display";
+import NodeDisplay from "../component/Node-display";
 
 export const useStore = create((set, get) => ({
   nodes: localStorage.getItem("nodes")
@@ -75,6 +75,7 @@ export const useStore = create((set, get) => ({
       get().connectNodes(prevNodeId, newNodeId);
     }
   },
+
 
    deleteNode(nodeId) {
     const belowEdge = get().edges.find(
