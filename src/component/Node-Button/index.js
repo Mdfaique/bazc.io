@@ -16,8 +16,6 @@ const NodeButton = (props) => {
   };
 
   const handleDelete = () => {
-    // Remove the node from SidebarData
-    if (!data.custom) return;
     const updatedData = { ...sidebarData };
     const nodeType = data.block_type;
     const nodes = updatedData[nodeType].filter(
@@ -30,7 +28,7 @@ const NodeButton = (props) => {
 
   return (
     <div className="node-button-wrapper">
-      <span onClick={handleDelete}>Del</span>
+      {data.custom && <span onClick={handleDelete}>Del</span>}
       <Button onClick={() => handleNodeCreation(data)} name={data.sub_type} />
     </div>
   );
