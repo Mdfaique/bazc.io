@@ -55,3 +55,12 @@
     gap: 5px;
     align-self: center;
   }
+
+  .node-wrapper .node-buttons-group button {
+    width: 4rem;
+    background-color: #a768a58a;
+  }
+
+  .node-wrapper .node-buttons-group button:hover {
+    background-color: #8d488b8a;
+  }
