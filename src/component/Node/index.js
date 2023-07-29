@@ -99,9 +99,9 @@ const Node = (props) => {
         </label>
       ))}
       <div className="node-buttons-group">
-        <Button name="Cancel" onClick={handleOnCancel} />
+        <Button name="❌" onClick={handleOnCancel} />
         <DeleteNodeButton nodeId={id} />
-        <Button name="Save" onClick={handleOnSave} />
+        <Button name="💾" onClick={handleOnSave} />
       </div>
       <Handle type="target" position="top" isConnectable={true} id={`${id}-top`} />
       <Handle type="source" position="bottom" isConnectable={true} id={`${id}-bottom`} />

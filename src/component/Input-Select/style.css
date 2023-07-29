@@ -20,4 +20,109 @@
     justify-content: center;
     margin-top: 10px;
   }
+
+
+  /* Dr0pdown styling */
+
+  /* Dr0pdown styling */
+
+/* Styling the select container */
+.custom-select {
+  font-size: 16px; /* Adjust the font size as needed */
+  padding: 8px; /* Match the padding to the console-component button */
+  border: none; /* Remove the border to match the console-component button */
+  border-radius: 5px; /* Match the border-radius to the console-component button */
+  background-color: rgb(120, 155, 202); /* Match the background color to the console-component button */
+  color: white; /* Match the text color to the console-component button */
+  width: 12.5rem; /* Match the width to the console-component button */
+  appearance: none; /* Remove the default arrow in some browsers */
+  cursor: pointer; /* Add a cursor on hover to match the console-component button */
+  position: relative; /* Add a position to position the dropdown arrow */
+}
+
+/* Styling the select container when it's being hovered */
+.custom-select:hover {
+  background-color: rgb(100, 139, 190); /* Match the hover background color to the console-component button */
+}
+
+/* Styling the select container when it's focused */
+.custom-select:focus {
+  outline: none; /* Remove the default focus outline */
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow when focused */
+}
+
+/* Styling the dropdown arrow */
+.custom-select::after {
+  content: '\25BC'; /* Unicode character for a downward-pointing triangle */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Make the arrow non-clickable */
+}
+
+/* Styling the options */
+.custom-option {
+  font-size: 14px; /* Adjust the font size for the options */
+  padding: 8px; /* Add some padding to the options */
+}
+
+/* Styling the options on hover */
+.custom-option:hover {
+  background-color: #f2f2f2; /* Change the background color on hover */
+}
+
+/* -------------------------- */
+/* Styling the data select container */
+.custom-data-select {
+  font-size: 16px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  width: 200px;
+  appearance: none;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(120, 155, 202);
+}
+
+/* Styling the data select container when it's being hovered */
+.custom-data-select:hover {
+  background-color: rgb(100, 139, 190);
+}
+
+/* Styling the data select container when it's focused */
+.custom-data-select:focus {
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling the data dropdown arrow */
+.custom-data-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Styling the data options */
+.custom-data-select option {
+  font-size: 14px;
+  padding: 8px;
+  background-color: #fff; /* Match the background color to the select container */
+  color: black; /* Match the text color to the select container */
+}
+
+/* Styling the data options on hover */
+.custom-data-select option:hover {
+  background-color: #f2f2f2;
+}
+
+
+/* dropdown style ended */
+
+
+
   
