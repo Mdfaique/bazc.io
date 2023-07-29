@@ -27,7 +27,7 @@ const DeleteNodeButton = ({ nodeId }) => {
     };
   }); // Add nodeId to the dependency array to ensure the effect runs whenever nodeId changes
 
-  return <Button name="Delete" onClick={handleDelete} />;
+  return <Button name=" 🗑️ " onClick={handleDelete} />;
 };
 
 export default DeleteNodeButton;
