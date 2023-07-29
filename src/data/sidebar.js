@@ -4,7 +4,14 @@ const SidebarData = {
       block_type: "flowControl",
       sub_type: "variable",
       total_inputs: 1,
-      input_value: null,
+      input_value: [
+        {
+          value: null,
+          system_defined_name: null,
+          selected_value: null,
+          parameter_name: "var_1",
+        },
+      ],
       output_Value: null, //undefined or not available
       return: false,
       selected_value: null,
