@@ -154,14 +154,16 @@ const CustomNode = (props) => {
             value={logicInput}
             onChange={handleLogicInput}
           />
+          <div className="btn-group">
           <Button
-            name="Cancel"
+            name="❌"
             onClick={handleCancel}
           />
           <Button
-            name="Save"
+            name="💾"
             onClick={handleSave}
           />
+          </div>
         </div>
       </div>
     </>

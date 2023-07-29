@@ -34,3 +34,37 @@
 .custom-component textarea {
     min-height: 5rem;
 }
+
+.custom-node-wrapper .btn-group {
+    display: flex;
+    gap: 10px;
+}
+.btn-group button {
+    width: 4rem;
+    background-color: #a768a58a;
+}
+
+.btn-group button:hover {
+    background-color: #8d488b8a;
+  }
+
+  .nodrag::-webkit-inner-spin-button,
+  .nodrag::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .custom-component select {
+    font-size: 16px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 5px;
+    width: 85%;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(118 87 129);
+  }
+  
+  .custom-component select:hover {
+    background-color: rgb(103 76 113);
+  }
