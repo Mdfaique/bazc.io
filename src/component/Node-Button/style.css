@@ -1,14 +1,14 @@
 .node-button-wrapper {
-    display: flex;
+  display: flex;
 }
 
 .node-button-wrapper span {
-    font-size: 10px;
-    padding: 2px 5px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    height: 15px;
-    position: absolute;
-    border-radius: 4px;
+  font-size: 10px;
+  padding: 2px 5px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  height: 15px;
+  position: absolute;
+  border-radius: 4px;
 }

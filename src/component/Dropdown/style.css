@@ -1,43 +1,42 @@
 /* style.css */
 select {
-    font-size: 14px;
-    padding: 4px;
-    border: 1px solid #ccc;
-    border-radius: 29px;
-    cursor: pointer;
-    margin-top: 5px;
-    width: 90%;
-  }
-  
-  select:focus {
-    outline: none;
-    border-color: #007bff; /* Change the border color on focus */
-  }
-  
-  option {
-    font-size: 16px;
-  }
-  
-  /* Optional: Add some styles to the dropdown arrow */
-  select::-ms-expand {
-    display: none; /* Remove the default arrow for IE/Edge */
-  }
-  
-  select::after {
-    content: "\f107"; /* FontAwesome icon for the dropdown arrow */
-    font-family: "Font Awesome 5 Free"; /* Replace with your own FontAwesome font-family */
-    font-weight: 900;
-    color: #777;
-    padding-left: 5px;
-  }
-  
-  /* Optional: Change the arrow color on hover */
-  select:hover::after {
-    color: #555;
-  }
-  
-  /* Optional: Change the arrow color on focus */
-  select:focus::after {
-    color: #007bff;
-  }
-  
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 29px;
+  cursor: pointer;
+  margin-top: 5px;
+  width: 90%;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff; /* Change the border color on focus */
+}
+
+option {
+  font-size: 16px;
+}
+
+/* Optional: Add some styles to the dropdown arrow */
+select::-ms-expand {
+  display: none; /* Remove the default arrow for IE/Edge */
+}
+
+select::after {
+  content: "\f107"; /* FontAwesome icon for the dropdown arrow */
+  font-family: "Font Awesome 5 Free"; /* Replace with your own FontAwesome font-family */
+  font-weight: 900;
+  color: #777;
+  padding-left: 5px;
+}
+
+/* Optional: Change the arrow color on hover */
+select:hover::after {
+  color: #555;
+}
+
+/* Optional: Change the arrow color on focus */
+select:focus::after {
+  color: #007bff;
+}

@@ -31,4 +31,3 @@ const DeleteNodeButton = ({ nodeId }) => {
 };
 
 export default DeleteNodeButton;
-

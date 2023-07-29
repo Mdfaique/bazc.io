@@ -1,14 +1,14 @@
 .bottom-bar-wrapper {
-    position: fixed;
-    display: flex;
-    flex-direction: row;
-    right: 0;
-    bottom: 1vh;
-    align-items: center;
-    gap: 5px;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  right: 0;
+  bottom: 1vh;
+  align-items: center;
+  gap: 5px;
 }
 
 .bottom-bar-button {
-    width: fit-content;
-    padding: 12px 20px;
+  width: fit-content;
+  padding: 12px 20px;
 }

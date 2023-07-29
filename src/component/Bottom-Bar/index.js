@@ -1,4 +1,4 @@
-import React, { useRef  } from "react";
+import React, { useRef } from "react";
 import "./style.css";
 import { useStore } from "../../store/store";
 import Button from "../Button";
@@ -10,7 +10,6 @@ const BottomBar = () => {
   const store = useStore();
   const actionsExecutedRef = useRef([]);
   const handleExecute = () => {
-
     function actionBody(nodeData) {
       const currentSubType = nodeData.sub_type;
 
@@ -32,14 +31,23 @@ const BottomBar = () => {
 
       if (nodeData.sub_type === "variable") {
         return `${"     "}let ${nodeData.user_defined_name} = ${
-          nodeData.input_value[0].selected_variable ?? nodeData.input_value[0].value
+          nodeData.input_value[0].selected_variable ??
+          nodeData.input_value[0].value
         };`;
       }
 
       if (nodeData.block_type === "action") {
-        const inputVals = nodeData.input_value.map((input)=>input.selected_variable ?? input.value);
+        const inputVals = nodeData.input_value.map(
+          (input) => input.selected_variable ?? input.value
+        );
         return `
-            ${nodeData.return ? `let ${nodeData.user_defined_name} = ${nodeData?.sub_type}(${inputVals.join(', ')});`: `${nodeData?.sub_type}(${inputVals.join(', ')});` }`;
+            ${
+              nodeData.return
+                ? `let ${nodeData.user_defined_name} = ${
+                    nodeData?.sub_type
+                  }(${inputVals.join(", ")});`
+                : `${nodeData?.sub_type}(${inputVals.join(", ")});`
+            }`;
       }
 
       return "";
@@ -71,10 +79,26 @@ const BottomBar = () => {
 
   return (
     <div className="bottom-bar-wrapper">
-      <Button onClick={handleNodesDeletion} name="Delete Nodes" className="bottom-bar-button" />
-      <Button onClick={handleExecute} name="Execute" className="bottom-bar-button" />
-      <Button onClick={handleLogNodes} name="Log Nodes" className="bottom-bar-button" />
-      <Button onClick={handleLogEdges} name="Log Edges" className="bottom-bar-button" />
+      <Button
+        onClick={handleNodesDeletion}
+        name="Delete Nodes"
+        className="bottom-bar-button"
+      />
+      <Button
+        onClick={handleExecute}
+        name="Execute"
+        className="bottom-bar-button"
+      />
+      <Button
+        onClick={handleLogNodes}
+        name="Log Nodes"
+        className="bottom-bar-button"
+      />
+      <Button
+        onClick={handleLogEdges}
+        name="Log Edges"
+        className="bottom-bar-button"
+      />
     </div>
   );
 };

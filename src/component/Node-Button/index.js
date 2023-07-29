@@ -6,32 +6,34 @@ import { useStore } from "../../store/store";
 import Button from "../Button";
 
 const NodeButton = (props) => {
-    const { data } = props;
-    const createNode = useStore((state) => state.createNode);
+  const { data } = props;
+  const createNode = useStore((state) => state.createNode);
 
-    const { sidebarData, setSidebarData } = useContext(SidebarDataContext);
+  const { sidebarData, setSidebarData } = useContext(SidebarDataContext);
 
-    const handleNodeCreation = (data) => {
-        createNode(data.sub_type, data);
-    };
+  const handleNodeCreation = (data) => {
+    createNode(data.sub_type, data);
+  };
 
-        const handleDelete = () => {
-            // Remove the node from SidebarData
-            if(!data.custom) return;
-            const updatedData = { ...sidebarData };
-            const nodeType = data.block_type;
-            const nodes = updatedData[nodeType].filter((node) => node.sub_type !== data.sub_type);
-            const updatedSidebarData = { ...sidebarData, action : nodes }
-            localStorage.setItem("SidebarData", JSON.stringify(updatedSidebarData));
-            setSidebarData(updatedSidebarData);
-          };
+  const handleDelete = () => {
+    // Remove the node from SidebarData
+    if (!data.custom) return;
+    const updatedData = { ...sidebarData };
+    const nodeType = data.block_type;
+    const nodes = updatedData[nodeType].filter(
+      (node) => node.sub_type !== data.sub_type
+    );
+    const updatedSidebarData = { ...sidebarData, action: nodes };
+    localStorage.setItem("SidebarData", JSON.stringify(updatedSidebarData));
+    setSidebarData(updatedSidebarData);
+  };
 
-    return (
-        <div className="node-button-wrapper">
-            <span onClick={handleDelete}>Del</span>
-            <Button onClick={()=> handleNodeCreation(data)} name={data.sub_type} />
-        </div>
-    )
-}
+  return (
+    <div className="node-button-wrapper">
+      <span onClick={handleDelete}>Del</span>
+      <Button onClick={() => handleNodeCreation(data)} name={data.sub_type} />
+    </div>
+  );
+};
 
 export default NodeButton;

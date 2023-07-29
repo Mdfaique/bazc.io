@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import Button from "../Button";
 import './style.css';
-import SidebarData from "../../data/sidebar";
 import { SidebarDataContext } from "../../store/SidebarDataContext";
 
 const CustomNode = (props) => {
@@ -111,8 +110,8 @@ const CustomNode = (props) => {
 
   return (
     <>
-      <div className="node-wrapper custom-node-wrapper">
-        <div className="node-component node-wrapper custom-component">
+      <div className="custom-node-wrapper">
+        <div className="node-wrapper custom-component">
           <p>Custom Node</p>
           <label>
             <span>Name</span>

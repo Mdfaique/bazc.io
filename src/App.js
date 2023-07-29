@@ -1,11 +1,10 @@
 import "./App.css";
-import React, {useState, useContext} from "react";
+import React, { useContext } from "react";
 import ReactFlow, { Background, MiniMap, Controls } from "reactflow";
 import { shallow } from "zustand/shallow";
 import { useStore } from "./store/store";
 import Sidebar from "./component/Sidebar";
 import BottomBar from "./component/Bottom-Bar";
-import SidebarData from "./data/sidebar";
 import NodeDisplay from "./component/Node-display";
 import { SidebarDataContext } from "./store/SidebarDataContext";
 
@@ -23,7 +22,9 @@ const App = () => {
   const { sidebarData } = useContext(SidebarDataContext);
 
   const updatedNodeTypes = React.useMemo(() => {
-    const flowControlNodes = sidebarData.flowControl.map((node) => node.sub_type);
+    const flowControlNodes = sidebarData.flowControl.map(
+      (node) => node.sub_type
+    );
     const actionNodes = sidebarData.action.map((node) => node.sub_type);
     const allNodes = [...flowControlNodes, ...actionNodes];
 
@@ -35,20 +36,20 @@ const App = () => {
 
   return (
     <>
-    <ReactFlow
-      nodes={store.nodes}
-      nodeTypes={updatedNodeTypes}
-      edges={store.edges}
-      onNodesChange={store.onNodesChange}
-      onEdgesChange={store.onEdgesChange}
-      onConnect={store.addEdge}
-    >
-      <Sidebar />
-      <BottomBar />
-      <Controls />
-      <MiniMap />
-      <Background />
-    </ReactFlow>
+      <ReactFlow
+        nodes={store.nodes}
+        nodeTypes={updatedNodeTypes}
+        edges={store.edges}
+        onNodesChange={store.onNodesChange}
+        onEdgesChange={store.onEdgesChange}
+        onConnect={store.addEdge}
+      >
+        <Sidebar />
+        <BottomBar />
+        <Controls />
+        <MiniMap />
+        <Background />
+      </ReactFlow>
     </>
   );
 };

@@ -2,7 +2,6 @@ import { applyNodeChanges, applyEdgeChanges } from "reactflow";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
 import produce from "immer";
-import NodeDisplay from "../component/Node-display";
 
 export const useStore = create((set, get) => ({
   nodes: localStorage.getItem("nodes")
@@ -34,7 +33,7 @@ export const useStore = create((set, get) => ({
   updateNode(id, data) {
     set({
       nodes: get().nodes.map((node) =>
-        node.id === id ? { ...node, data: { ...node.data, ...data, } } : node
+        node.id === id ? { ...node, data: { ...node.data, ...data } } : node
       ),
     });
   },
@@ -65,9 +64,9 @@ export const useStore = create((set, get) => ({
       y: 100 + nodesLength * 100, // Add a gap of 100px for each node
     };
     const newNode = { id, type, position, data: additionalData };
-  
+
     set({ nodes: [...get().nodes, newNode] });
-  
+
     // Automatically connect nodes when a new node is added
     if (nodesLength > 0) {
       const prevNodeId = get().nodes[nodesLength - 1].id;
@@ -76,15 +75,14 @@ export const useStore = create((set, get) => ({
     }
   },
 
-
-   deleteNode(nodeId) {
+  deleteNode(nodeId) {
     const belowEdge = get().edges.find(
       (edge) => edge.source === nodeId && edge.target !== nodeId
     );
     const belowNode = belowEdge
       ? get().nodes.find((node) => node.id === belowEdge.target)
       : null;
-  
+
     // Find the node above the deleted node (if it exists)
     const aboveEdge = get().edges.find(
       (edge) => edge.target === nodeId && edge.source !== nodeId
@@ -92,25 +90,24 @@ export const useStore = create((set, get) => ({
     const aboveNode = aboveEdge
       ? get().nodes.find((node) => node.id === aboveEdge.source)
       : null;
-  
+
     // Connect the remaining nodes based on their positions
     if (belowNode && aboveNode) {
       get().addEdge({ source: aboveNode.id, target: belowNode.id });
     }
-  
+
     // Filter out edges connected to the node being deleted
     const filteredEdges = get().edges.filter(
       (edge) => edge.source !== nodeId && edge.target !== nodeId
     );
-  
+
     // Filter out the node to be deleted from the nodes array
     const filteredNodes = get().nodes.filter((node) => node.id !== nodeId);
-  
-    // Update the state and localStorage with the filtered nodes and edges
-  set({ nodes: filteredNodes, edges: filteredEdges });
-  localStorage.setItem("nodes", JSON.stringify(filteredNodes));
-  localStorage.setItem("edges", JSON.stringify(filteredEdges));
 
+    // Update the state and localStorage with the filtered nodes and edges
+    set({ nodes: filteredNodes, edges: filteredEdges });
+    localStorage.setItem("nodes", JSON.stringify(filteredNodes));
+    localStorage.setItem("edges", JSON.stringify(filteredEdges));
   },
   loadFromLocalStorage() {
     const savedNodes = localStorage.getItem("nodes");
