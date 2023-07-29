@@ -1,7 +1,8 @@
 import { applyNodeChanges, applyEdgeChanges } from "reactflow";
 import { nanoid } from "nanoid";
 import { create } from "zustand";
-import produce from "immer"; 
+import produce from "immer";
+import NodeDisplay from "./component/Node-display";
 
 export const useStore = create((set, get) => ({
   nodes: localStorage.getItem("nodes")

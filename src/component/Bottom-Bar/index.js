@@ -12,16 +12,7 @@ const BottomBar = () => {
   const handleExecute = () => {
     function actionBody(nodeData) {
       if (!nodeData || nodeData.block_type !== "action") return;
-      const totalInputParams = nodeData?.input_value?.length;
-      const inputParams = [];
-      for (let i = 0; i < totalInputParams; i++) {
-        inputParams.push(`v${i + 1}`);
-      }
-      return `${"    "}function ${nodeData.sub_type}(${inputParams.join(
-        ", "
-      )}) {
-            ${nodeData?.function_body}
-          };`;
+      return nodeData?.function_body;
     }
 
     function formatFunctionString(nodeData) {
@@ -29,14 +20,14 @@ const BottomBar = () => {
 
       if (nodeData.sub_type === "variable") {
         return `${"     "}let ${nodeData.user_defined_name} = ${
-          nodeData.input_value
+          nodeData.input_value[0].value
         };`;
       }
 
       if (nodeData.block_type === "action" && nodeData.sub_type === "sum") {
         return `
-            let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].selected_value}, ${nodeData.input_value[1].selected_value});
-            print(${nodeData.user_defined_name} )`;
+            let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].value}, ${nodeData.input_value[1].value});
+            print(${nodeData.user_defined_name})`;
       }
 
       return "";
@@ -46,11 +37,6 @@ const BottomBar = () => {
     const functionStr = `${validNodes
       .map((node) => actionBody(node?.data))
       .join("\n")}
-        
-        function print(msg) {
-          console.log(msg);
-        };
-    
         function testProgram() {
       ${validNodes.map((node) => formatFunctionString(node?.data)).join("\n")}
       };

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useStore } from "../../store";
+import Button from "../Button";
 
 const DeleteNodeButton = ({ nodeId }) => {
   const deleteNode = useStore((state) => state.deleteNode);
@@ -26,7 +27,7 @@ const DeleteNodeButton = ({ nodeId }) => {
     };
   }); // Add nodeId to the dependency array to ensure the effect runs whenever nodeId changes
 
-  return <button onClick={handleDelete}>Delete Node</button>;
+  return <Button name="Delete" onClick={handleDelete} />;
 };
 
 export default DeleteNodeButton;

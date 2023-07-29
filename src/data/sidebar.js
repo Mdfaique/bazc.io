@@ -12,7 +12,7 @@ const SidebarData = {
           parameter_name: "var_1",
         },
       ],
-      output_Value: null, //undefined or not available
+      output_value: null, //undefined or not available
       return: false,
       selected_value: null,
       system_defined_name: null,
@@ -38,26 +38,30 @@ const SidebarData = {
           parameter_name: "input_2",
         },
       ],
-      function_body: null,
-      output_Value: null,
+      function_body: `function sum(input_1, input_2) {
+        return ( input_1 + input2 );
+      }`,
+      output_value: null,
       return: true,
       system_defined_name: null,
       user_defined_name: null,
     },
     {
       block_type: "action",
-      sub_type: "console",
+      sub_type: "print",
       total_inputs: 1,
       input_value: [
         {
           value: null,
           system_defined_name: null,
           selected_value: null,
-          parameter_name: "input_1",
+          parameter_name: "msg",
         },
       ],
-      function_body: null,
-      output_Value: null,
+      function_body: `function print(msg) {
+        console.log(msg);
+      }`,
+      output_value: null,
       return: false,
       system_defined_name: null,
       user_defined_name: null,

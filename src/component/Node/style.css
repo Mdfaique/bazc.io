@@ -1,0 +1,57 @@
+/* node common css */
+.node-wrapper {
+    border-radius: 18px;
+    width: 18rem;
+    height: fit-content;
+    padding: 18px;
+    background-color: #c3adc3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .node-wrapper .node-subtype {
+    position: relative;
+    font-size: 12px;
+    top: -15px;
+    left: 8px;
+  }
+  
+  .node-wrapper label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .node-wrapper input {
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+    border: 1px solid rgb(184 28 223);
+    background-color: transparent;
+    width: 85%;
+  }
+  
+  .node-wrapper input:focus {
+    outline: none;
+  }
+  
+  .node-wrapper textarea {
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+    border: 1px solid rgb(184 28 223);
+    background-color: transparent;
+    width: 85%;
+  }
+  
+  .node-wrapper textarea:focus {
+    outline: none;
+  }
+  
+  .node-wrapper .node-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-self: center;
+  }
