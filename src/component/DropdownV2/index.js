@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./style.css";
 
 const DropdownV2 = (props) => {
-  const [inputVal, setInputVal] = useState("");
   const [consoleVal, setConsoleVal] = useState("");
   const [selectedData, setSelectedData] = useState(""); // To store the selected data from the dropdown
   const [isInputSelected, setIsInputSelected] = useState(true);
@@ -59,7 +58,6 @@ const DropdownV2 = (props) => {
               type="text"
               value={consoleVal}
               onChange={(e) => {
-                setInputVal(e.target.value);
                 setConsoleVal(e.target.value);
               }}
             />
