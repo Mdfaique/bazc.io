@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef  } from "react";
 import "./style.css";
 import { useStore } from "../../store";
 import Button from "../Button";
@@ -8,10 +8,22 @@ const BottomBar = () => {
     (state) => state.deleteAllNodesAndData
   );
   const store = useStore();
-
+  const actionsExecutedRef = useRef([]);
   const handleExecute = () => {
+
     function actionBody(nodeData) {
+      const currentSubType = nodeData.sub_type;
+
+      // Check if the currentSubType is present in actionsExecutedRef.current
+      if (actionsExecutedRef.current.includes(currentSubType)) {
+        return null; // or return any other appropriate value
+      }
+
+      // Add the currentSubType to actionsExecutedRef.current directly
+      actionsExecutedRef.current.push(currentSubType);
+
       if (!nodeData || nodeData.block_type !== "action") return;
+
       return nodeData?.function_body;
     }
 
@@ -20,14 +32,14 @@ const BottomBar = () => {
 
       if (nodeData.sub_type === "variable") {
         return `${"     "}let ${nodeData.user_defined_name} = ${
-          nodeData.input_value[0].value
+          nodeData.input_value[0].selected_variable ?? nodeData.input_value[0].value
         };`;
       }
 
-      if (nodeData.block_type === "action" && nodeData.sub_type === "sum") {
+      if (nodeData.block_type === "action") {
+        const inputVals = nodeData.input_value.map((input)=>input.selected_variable ?? input.value);
         return `
-            let ${nodeData.user_defined_name} = sum(${nodeData.input_value[0].value}, ${nodeData.input_value[1].value});
-            print(${nodeData.user_defined_name})`;
+            ${nodeData.return ? `let ${nodeData.user_defined_name} = ${nodeData?.sub_type}(${inputVals.join(', ')});`: `${nodeData?.sub_type}(${inputVals.join(', ')});` }`;
       }
 
       return "";

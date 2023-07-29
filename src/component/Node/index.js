@@ -5,6 +5,7 @@ import { useStore } from "../../store";
 import Button from "../Button";
 import DeleteNodeButton from "../DeleteNodeButton/DeleteNodeButton";
 import './style.css';
+import InputSelect from "../Input-Select";
 
 const Node = (props) => {
   const { node, setPopup, id } = props;
@@ -26,24 +27,36 @@ const Node = (props) => {
   const [name, setName] = useState(node?.user_defined_name);
   const [inputVals, setInputVals] = useState(node?.input_value);
 
-  const handleInputChange = (index, event) => {
-    const updatedInputVals = [...inputVals]; // Clone the inputVals array
-  updatedInputVals[index] = { ...updatedInputVals[index] }; // Clone the object at the specified index
-  updatedInputVals[index].value = event.target.value; // Update the 'value' property
-  setInputVals(updatedInputVals);
+  const handleInputChange = (index, inputValue) => {
+    const updatedInputVals = [...inputVals];
+    updatedInputVals[index] = { ...updatedInputVals[index] };
+    updatedInputVals[index].value = inputValue;
+    setInputVals(updatedInputVals);
+  };
+
+  const handleSelectChange = (index, selected) => {
+    const updatedInputVals = [...inputVals];
+    updatedInputVals[index] = { ...updatedInputVals[index] };
+    updatedInputVals[index].selected_value = selected.selectedVar;
+    updatedInputVals[index].value = selected.selectedValue;
+    updatedInputVals[index].selected_variable = selected.selectedValueVar;
+    setInputVals(updatedInputVals);
   };
 
   const handleOnCancel = () => {
     setPopup(false);
   };
 
+  const nodeReturn = node?.return;
+  
   const handleOnSave = () => {
     const data = {
       ...node,
+      id,
       input_value: inputVals,
       output_value: null,
       selected_value: null,
-      system_defined_name: `steps.${name}.input`,
+      system_defined_name: nodeReturn ? `steps.${name}.output` : `steps.${name}.input`,
       user_defined_name: name,
     };
     setInputVal(id, data);
@@ -58,6 +71,9 @@ const Node = (props) => {
     setPopup(false);
   };
 
+  const noCurrentNode = store?.nodes?.filter((node)=> node?.id !== id)
+  const availableOptions = noCurrentNode?.length ? noCurrentNode?.filter((node)=> node?.data?.block_type === 'flowControl' || node?.data?.return).map((node) => node?.data) : [];
+
   return (
     <div className="node-wrapper">
       <div className="node-subtype">{node?.sub_type}</div>
@@ -70,10 +86,16 @@ const Node = (props) => {
         </div>
       ) : null}
       {node?.input_value?.map((input, index) => (
-        <label className="node-param-input">
+        <label className="node-param-input" key={index}>
           {input?.parameter_name}
-          <input type="text" value={inputVals[index].value}
-              onChange={(e) => handleInputChange(index, e)} />
+          <InputSelect
+          options={availableOptions}
+          handleInputChange={(value) => handleInputChange(index, value)}
+          handleSelectChange={(value) => handleSelectChange(index, value)}
+          inputValue={input?.value}
+          inputSelected={input?.selected_value === null}
+          selectedValue={input?.selected_value}
+/>
         </label>
       ))}
       <div className="node-buttons-group">
